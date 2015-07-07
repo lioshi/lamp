@@ -1,19 +1,4 @@
-FROM debian:jessie
-MAINTAINER lioshi <lioshi@lioshi.com>
 
-# Install packages
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update 
-RUN apt-get -y install supervisor git apache2 libapache2-mod-php5 mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz nodejs npm parallel
-
-# Install less node packages
-RUN npm install -g less  
-RUN npm install -g less-plugin-autoprefix 
-RUN npm install -g less-plugin-group-css-media-queries
-
-#Install imagick
-RUN apt-get -y install imagemagick php5-imagick 
-#RUN apachectl restart
 
 # Apache2 conf
 RUN echo "# Include vhost conf" >> /etc/apache2/apache2.conf 
@@ -65,11 +50,7 @@ VOLUME  ["/etc/mysql", "/var/lib/mysql" ]
 # /data/docker-diem/lib  : external libs
 VOLUME  ["/data"]
 
-# Add alias
-RUN echo "alias node='nodejs'" >> ~/.bashrc
 
-# Add links
-RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 EXPOSE 80 3306
 CMD ["/run.sh"] 

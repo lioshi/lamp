@@ -1,52 +1,95 @@
-# LAMP Docker
+FROM debian:jessie
+MAINTAINER lioshi <lioshi@lioshi.com>
 
-FROM dockie/dockie
-MAINTAINER Rob Loach <robloach@gmail.com>
+# Install packages
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update 
+RUN apt-get -y install supervisor git apache2 libapache2-mod-php5 mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz nodejs npm parallel
 
+# Install less node packages
+RUN npm install -g less  
+RUN npm install -g less-plugin-autoprefix 
+RUN npm install -g less-plugin-group-css-media-queries
 
-# Apache
+#Install imagick
+RUN apt-get -y install imagemagick php5-imagick 
+#RUN apachectl restart
 
-ADD configs/apache2/apache2-service.sh /apache2-service.sh
-RUN apt-get install -y apache2 && \
-  chmod +x /*.sh && \
-  a2enmod rewrite
-ADD configs/apache2/apache_default /etc/apache2/sites-available/000-default.conf
-ADD configs/apache2/supervisor.conf /etc/supervisor/conf.d/apache2.conf
+# Apache2 conf
+RUN echo "# Include vhost conf" >> /etc/apache2/apache2.conf 
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf 
+RUN echo "IncludeOptional /data/lamp/conf/*.conf" >> /etc/apache2/apache2.conf 
+RUN echo "<Directory /data/lamp/www> " >> /etc/apache2/apache2.conf 
+RUN echo "    Options Indexes FollowSymLinks Includes ExecCGI" >> /etc/apache2/apache2.conf 
+RUN echo "    AllowOverride None" >> /etc/apache2/apache2.conf 
+RUN echo "    Require all granted" >> /etc/apache2/apache2.conf 
+RUN echo "</Directory>" >> /etc/apache2/apache2.conf 
 
+# Timezone settings
+ENV TIMEZONE="Europe/Paris"
+RUN echo "date.timezone = '${TIMEZONE}'" >> /etc/php5/cli/php.ini && \
+  echo "${TIMEZONE}" > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
 
-# PHP
+# Add image configuration and scripts
+ADD start-apache2.sh /start-apache2.sh
+ADD start-mysqld.sh /start-mysqld.sh
+ADD run.sh /run.sh
+RUN chmod 755 /*.sh
+ADD my.cnf /etc/mysql/conf.d/my.cnf
+ADD supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
+ADD supervisord-mysqld.conf /etc/supervisor/conf.d/supervisord-mysqld.conf
 
-RUN apt-get install -y libapache2-mod-php5 php5 php5-json php5-cli php5-curl curl php5-mcrypt php5-xdebug mcrypt libmcrypt-dev
-ADD configs/php/php.ini /etc/php5/apache2/conf.d/30-docker.ini
+# Remove pre-installed database
+RUN rm -rf /var/lib/mysql/*
 
+# Add MySQL utils
+ADD create_mysql_admin_user.sh /create_mysql_admin_user.sh
+RUN chmod 755 /*.sh
 
-# MySQL
+# config Apache
+RUN a2enmod rewrite
 
-ADD configs/mysql/mysql-setup.sh /mysql-setup.sh
-ADD configs/mysql/my.cnf /etc/mysql/conf.d/my.cnf
-ADD configs/mysql/supervisor.conf /etc/supervisor/conf.d/mysql.conf
-RUN apt-get install -y mysql-server mysql-client php5-mysql && \
-  chmod +x /*.sh && \
-  /mysql-setup.sh
+# Environment variables to configure php
+ENV PHP_UPLOAD_MAX_FILESIZE 10M
+ENV PHP_POST_MAX_SIZE 10M
+
+# Add dirs for manage sites (mount from host in run needeed for persistence)
+RUN mkdir /data && mkdir /data/lamp && mkdir /data/lamp/conf && mkdir /data/lamp/www && mkdir /data/lamp/lib && mkdir /data/lamp/mysql
+
+# Add volumes for MySQL 
+VOLUME  ["/etc/mysql", "/var/lib/mysql" ]
+
+# Add volumes for sites, confs and libs and mysql from host
+# /data/lamp/conf : apache conf file
+# /data/lamp/www  : site's file
+# /data/lamp/lib  : external libs
+VOLUME  ["/data"]
+
+# Add alias
+RUN echo "alias node='nodejs'" >> ~/.bashrc
+
+# Add links
+RUN ln -s /usr/bin/nodejs /usr/bin/node
+
 
 
 # PHPMyAdmin
 
-RUN (echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | debconf-set-selections)
-RUN (echo 'phpmyadmin phpmyadmin/app-password password root' | debconf-set-selections)
-RUN (echo 'phpmyadmin phpmyadmin/app-password-confirm password root' | debconf-set-selections)
-RUN (echo 'phpmyadmin phpmyadmin/mysql/admin-pass password root' | debconf-set-selections)
-RUN (echo 'phpmyadmin phpmyadmin/mysql/app-pass password root' | debconf-set-selections)
-RUN (echo 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2' | debconf-set-selections)
-RUN apt-get install phpmyadmin -y
-ADD configs/phpmyadmin/config.inc.php /etc/phpmyadmin/conf.d/config.inc.php
-RUN chmod 755 /etc/phpmyadmin/conf.d/config.inc.php
-ADD configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
-RUN chmod +x /phpmyadmin-setup.sh
-RUN /phpmyadmin-setup.sh
+# RUN (echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | debconf-set-selections)
+# RUN (echo 'phpmyadmin phpmyadmin/app-password password root' | debconf-set-selections)
+# RUN (echo 'phpmyadmin phpmyadmin/app-password-confirm password root' | debconf-set-selections)
+# RUN (echo 'phpmyadmin phpmyadmin/mysql/admin-pass password root' | debconf-set-selections)
+# RUN (echo 'phpmyadmin phpmyadmin/mysql/app-pass password root' | debconf-set-selections)
+# RUN (echo 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2' | debconf-set-selections)
+# RUN apt-get install phpmyadmin -y
+# ADD configs/phpmyadmin/config.inc.php /etc/phpmyadmin/conf.d/config.inc.php
+# RUN chmod 755 /etc/phpmyadmin/conf.d/config.inc.php
+# ADD configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
+# RUN chmod +x /phpmyadmin-setup.sh
+# RUN /phpmyadmin-setup.sh
 
 
-# Start
 
-VOLUME /var/www/html
-EXPOSE 22 80 3306
+
+EXPOSE 80 3306
+CMD ["/run.sh"] 
