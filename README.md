@@ -110,6 +110,15 @@ Into this dir launch
 
 Etc...
 
+Sample for an sitediem2.loc site
+
+	mkdir /data/lamp/www/sitediem2 && \
+    cd /data/lamp/www/sitediem2 && \
+    php /data/gitlibs/diem/install && \
+    php /data/lamp/www/sitediem2/symfony theme:install && \
+    php /data/lamp/www/sitediem2/symfony db:loadDB && \
+    php /data/lamp/www/sitediem2/symfony less:compile-all
+
 ## Erase container
 
     sudo docker rm -f lamp
