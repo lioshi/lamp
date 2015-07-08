@@ -4,7 +4,7 @@ MAINTAINER lioshi <lioshi@lioshi.com>
 # Install packages
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update 
-RUN apt-get -y install supervisor git apache2 libapache2-mod-php5 mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz nodejs npm parallel
+RUN apt-get -y install supervisor apt-utils git apache2 libapache2-mod-php5 mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz nodejs npm parallel 
 
 # Install less node packages
 RUN npm install -g less  
@@ -72,51 +72,21 @@ RUN echo "alias node='nodejs'" >> ~/.bashrc
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 
+# PHPMyAdmin
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+RUN (echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | debconf-set-selections)
+RUN (echo 'phpmyadmin phpmyadmin/app-password password root' | debconf-set-selections)
+RUN (echo 'phpmyadmin phpmyadmin/app-password-confirm password root' | debconf-set-selections)
+RUN (echo 'phpmyadmin phpmyadmin/mysql/admin-pass password root' | debconf-set-selections)
+RUN (echo 'phpmyadmin phpmyadmin/mysql/app-pass password root' | debconf-set-selections)
+RUN (echo 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2' | debconf-set-selections)
+RUN apt-get install phpmyadmin -y
+ADD configs/phpmyadmin/config.inc.php /etc/phpmyadmin/conf.d/config.inc.php
+RUN chmod 755 /etc/phpmyadmin/conf.d/config.inc.php
+ADD configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
+#RUN chmod +x /phpmyadmin-setup.sh
+#RUN /phpmyadmin-setup.sh
 
 
 EXPOSE 80 3306
 CMD ["/run.sh"] 
-
-
-
-
-
-# PHPMyAdmin
-
-
-
-
-# RUN (echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | debconf-set-selections)
-# RUN (echo 'phpmyadmin phpmyadmin/app-password password root' | debconf-set-selections)
-# RUN (echo 'phpmyadmin phpmyadmin/app-password-confirm password root' | debconf-set-selections)
-# RUN (echo 'phpmyadmin phpmyadmin/mysql/admin-pass password root' | debconf-set-selections)
-# RUN (echo 'phpmyadmin phpmyadmin/mysql/app-pass password root' | debconf-set-selections)
-# RUN (echo 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2' | debconf-set-selections)
-# RUN apt-get install phpmyadmin -y
-# ADD configs/phpmyadmin/config.inc.php /etc/phpmyadmin/conf.d/config.inc.php
-# RUN chmod 755 /etc/phpmyadmin/conf.d/config.inc.php
-# ADD configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
-# RUN chmod +x /phpmyadmin-setup.sh
-# RUN /phpmyadmin-setup.sh
