@@ -25,8 +25,23 @@ echo "You can now connect to this MySQL Server using:"
 echo ""
 echo "    mysql -uadmin -p$PASS -h<host> -P<port>"
 echo ""
-echo "Please remember to change the above password as soon as possible!"
-echo "MySQL user 'root' has no password but only allows local connections"
+#echo "Please remember to change the above password as soon as possible!"
+echo "MySQL user 'root' has password 'root' but only allows local connections"
 echo "========================================================================"
 
-mysqladmin -uroot shutdown
+
+# phpmyadmin configuration
+
+# Change the MySQL root password
+mysqladmin -u root password root
+
+# Create the phpmyadmin storage configuration database.
+mysql -uroot -proot -e "CREATE DATABASE phpmyadmin; GRANT ALL PRIVILEGES ON phpmyadmin.* TO 'root'@'localhost' IDENTIFIED BY 'root'; FLUSH PRIVILEGES;"
+
+# Import the configuration storage database.
+gunzip < /usr/share/doc/phpmyadmin/examples/create_tables.sql.gz | mysql -u root -proot phpmyadmin
+
+# Shutdown the server.
+mysqladmin -u root -proot shutdown
+
+
