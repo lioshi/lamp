@@ -33,7 +33,7 @@ RUN echo "date.timezone = '${TIMEZONE}'" >> /etc/php5/cli/php.ini && \
 # Add image configuration and scripts
 ADD start-apache2.sh /start-apache2.sh
 ADD start-mysqld.sh /start-mysqld.sh
-ADD run.sh /run.sh
+#ADD run.sh /run.sh
 RUN chmod 755 /*.sh
 ADD my.cnf /etc/mysql/conf.d/my.cnf
 ADD supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
@@ -54,7 +54,7 @@ ENV PHP_UPLOAD_MAX_FILESIZE 10M
 ENV PHP_POST_MAX_SIZE 10M
 
 # Add dirs for manage sites (mount from host in run needeed for persistence)
-RUN mkdir /data && mkdir /data/lamp && mkdir /data/lamp/conf && mkdir /data/lamp/www && mkdir /data/lamp/lib && mkdir /data/lamp/mysql
+RUN mkdir /data && mkdir /data/lamp && mkdir /data/lamp/conf && mkdir /data/lamp/www 
 
 # Add volumes for MySQL 
 VOLUME  ["/etc/mysql", "/var/lib/mysql" ]
@@ -62,7 +62,6 @@ VOLUME  ["/etc/mysql", "/var/lib/mysql" ]
 # Add volumes for sites, confs and libs and mysql from host
 # /data/lamp/conf : apache conf file
 # /data/lamp/www  : site's file
-# /data/lamp/lib  : external libs
 VOLUME  ["/data"]
 
 # Add alias
@@ -86,6 +85,14 @@ RUN chmod 755 /etc/phpmyadmin/conf.d/config.inc.php
 ADD configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
 #RUN chmod +x /phpmyadmin-setup.sh
 #RUN /phpmyadmin-setup.sh
+
+
+
+
+
+ADD run.sh /run.sh
+RUN chmod 755 /*.sh
+
 
 
 EXPOSE 80 3306
