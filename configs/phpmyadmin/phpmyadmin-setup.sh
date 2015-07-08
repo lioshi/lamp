@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Start MySQL
-/usr/bin/mysqld_safe > /dev/null 2>&1 &
+#/usr/bin/mysqld_safe > /dev/null 2>&1 &
+exec mysqld_safe
+
 
 # Wait until the MySQL server is available.
 RET=1

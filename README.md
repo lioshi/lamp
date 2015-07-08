@@ -12,6 +12,16 @@ This docker image is used to launch container with all necessary applicatives in
 - NodeJs
 - etc ...
 
+# Site sample
+
+
+TODO
+
+
+
+
+# Diem's site sample
+
 ## Launch container
 
 Create local datas. Create host directories.
@@ -36,6 +46,7 @@ Container launching
     -v /var/lib/mysql:/var/lib/mysql \
     -e MYSQL_PASS="admin" \
     --name=lamp \
+    --add-host=vm20.local:91.194.100.247 \
     lamp:latest
 
 Alternative launching with added hosts for container. Needed for install a diem site
@@ -48,6 +59,7 @@ Alternative launching with added hosts for container. Needed for install a diem 
     --add-host=sitediem.loc:127.0.0.1 \
     --add-host=sitediem2.loc:127.0.0.1 \
     --add-host=sitediem3.loc:127.0.0.1 \
+    --add-host=vm20.local:91.194.100.247 \
     lamp:latest
 
 ## Access container in CLI
@@ -79,7 +91,7 @@ See status
 	apachectl configtest
 
 
-##Xdebug usage
+## Xdebug usage
 Install package Xdebug
 
 	apt-get -y install php5-xdebug

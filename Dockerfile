@@ -73,7 +73,40 @@ RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXPOSE 80 3306
+CMD ["/run.sh"] 
+
+
+
+
+
 # PHPMyAdmin
+
+
+
 
 # RUN (echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | debconf-set-selections)
 # RUN (echo 'phpmyadmin phpmyadmin/app-password password root' | debconf-set-selections)
@@ -87,9 +120,3 @@ RUN ln -s /usr/bin/nodejs /usr/bin/node
 # ADD configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
 # RUN chmod +x /phpmyadmin-setup.sh
 # RUN /phpmyadmin-setup.sh
-
-
-
-
-EXPOSE 80 3306
-CMD ["/run.sh"] 
