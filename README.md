@@ -24,6 +24,7 @@ Create local datas. Create host directories.
     mkdir /data/lamp/www 
 
 Directory */data/lamp/conf* contains apache conf files for each site
+
 Directory */data/lamp/www* contains site's source's file
 
 Add host locally (in your /etc/hosts file)
