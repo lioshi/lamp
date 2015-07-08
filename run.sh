@@ -15,5 +15,5 @@ else
     echo "=> Using an existing volume of MySQL"
 fi
 
-exec supervisord -n
+exec supervisord -n -c /etc/supervisor/supervisord.conf
 
