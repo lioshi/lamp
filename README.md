@@ -12,15 +12,46 @@ This docker image is used to launch container with all necessary applicatives in
 - NodeJs
 - etc ...
 
-# Site sample
+# Usage for site sample
+
+## Launch container
+
+Create local datas. Create host directories.
+
+    mkdir /data 
+    mkdir /data/lamp 
+    mkdir /data/lamp/conf 
+    mkdir /data/lamp/www 
+
+Directory */data/lamp/conf* contains apache conf files for each site
+Directory */data/lamp/www* contains site's source's file
+
+Add host locally (in your /etc/hosts file)
+
+	127.0.0.1   site.loc 
+
+Container launching (with sample site create)
+
+	sudo docker run -d -p 80:80 -p 3306:3306 \
+	-v /data:/data \
+	-v /var/lib/mysql:/var/lib/mysql \
+	-e MYSQL_PASS="admin" \
+	-e SITE_SAMPLE="create" \
+	--name=lamp \
+	lamp:latest
+
+Container launching (with sample site erase if allready exists in /data dir of host machine)
+
+	sudo docker run -d -p 80:80 -p 3306:3306 \
+	-v /data:/data \
+	-v /var/lib/mysql:/var/lib/mysql \
+	-e MYSQL_PASS="admin" \
+	-e SITE_SAMPLE="erase" \
+	--name=lamp \
+	lamp:latest
 
 
-TODO
-
-
-
-
-# Diem's site sample
+# Usage for diem's site sample
 
 ## Launch container
 
@@ -37,7 +68,6 @@ Create local datas. Create host directories.
 
 Directory */data/lamp/conf* contains apache conf files for each site
 Directory */data/lamp/www* contains site's source's file
-Directory */data/lamp/lib* contains external libs, diem's lib needed
 
 Container launching
 	

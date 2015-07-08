@@ -15,5 +15,39 @@ else
     echo "=> Using an existing volume of MySQL"
 fi
 
+# Create sample site (site.loc)
+echo "SITE_SAMPLE : ${SITE_SAMPLE}"
+
+if [ -z "${SITE_SAMPLE}" ] 
+then
+	echo "No env var SITE_SAMPLE in docker run command. Do nothing."
+else 
+	if [ "${SITE_SAMPLE}" = "create" ]
+	then
+		echo '<VirtualHost *:80>   
+  ServerName    site.loc  
+  DocumentRoot  /data/lamp/www/site/htdocs  
+  AddType         application/x-httpd-php .php  
+  DirectoryIndex  index.php  
+  CustomLog     /data/lamp/www/site/log/request.log combined  
+  KeepAlive Off  
+  <Directory /data/lamp/www/site/htdocs>  
+    Options +FollowSymLinks +ExecCGI  
+  </Directory>  
+</VirtualHost>' > /data/lamp/conf/httpd-site.conf;
+		mkdir /data/lamp/www/site;
+		mkdir /data/lamp/www/site/htdocs;
+		mkdir /data/lamp/www/site/log;
+		echo '<h1>Hello site.loc</h1>' > /data/lamp/www/site/htdocs/index.php;
+	else
+		rm -f /data/lamp/conf/httpd-site.conf;
+		rm -Rf /data/lamp/www/site;
+	fi
+fi
+
+
+
+
+
 exec supervisord -n -c /etc/supervisor/supervisord.conf
 
