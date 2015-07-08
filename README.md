@@ -140,15 +140,6 @@ If needed
 
 
 
-# Infos docker
-## Create Dockerfile in github
-
-See https://github.com/lioshi/lamp
-
-## Automatic build image
-
-créer image: https://www.wanadev.fr/docker-vivre-avec-une-baleine-partie-2/
-interactive build image : http://www.projectatomic.io/docs/docker-building-images/
 
 
 
