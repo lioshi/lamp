@@ -130,6 +130,9 @@ See status
 	apachectl status
 	apachectl configtest
 
+## PhpMyAdmin access
+
+http://localhost/phpmyadmin
 
 ## Xdebug usage
 Install package Xdebug
