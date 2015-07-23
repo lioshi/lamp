@@ -72,7 +72,6 @@ RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 
 # PHPMyAdmin
-
 RUN (echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | debconf-set-selections)
 RUN (echo 'phpmyadmin phpmyadmin/app-password password root' | debconf-set-selections)
 RUN (echo 'phpmyadmin phpmyadmin/app-password-confirm password root' | debconf-set-selections)
@@ -86,8 +85,11 @@ ADD configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
 #RUN chmod +x /phpmyadmin-setup.sh
 #RUN /phpmyadmin-setup.sh
 
-
-
+# Symfony 2
+RUN apt-get -y install curl
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
+RUN apt-get -y install php5-dev memcached php5-memcached 
 
 
 ADD run.sh /run.sh

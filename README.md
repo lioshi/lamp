@@ -31,6 +31,10 @@ Add host locally (in your /etc/hosts file)
 
 	127.0.0.1   site.loc 
 
+Run docker service
+
+	sudo service docker start
+
 Container launching (with sample site create)
 
 	sudo docker run -d -p 80:80 -p 3306:3306 \
@@ -152,8 +156,49 @@ If needed
 
 
 
+## Install testa
 
+Créer un fichier de conf apache dans le dossier /data/lamp/conf de l'hôte
 
+    <VirtualHost *:80>
+      ServerName    testa.loc
+      DocumentRoot  /data/lamp/www/testa/web
+      AddType         application/x-httpd-php .php
+      DirectoryIndex  app.php
+    <Directory /data/lamp/www/testa/web>
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+        #<IfModule mod_vhost_alias.c>
+        #    RewriteBase /
+        #</IfModule>
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteRule ^(.*)$ app.php [QSA,L]
+    </IfModule>
+    </Directory>
+    </VirtualHost>      
+
+Et ajouter dans le /etc/hosts de l'hôte
+
+    127.0.0.1   sf2.loc
+
+Cloner https://github.com/SidPresse/testa.git (ou un fork si vous n'avez pas accès) dans le dossier /data/lamp/www de l'hôte
+
+    cd /data/lamp/www
+    git clone https://github.com/SidPresse/testa.git
+
+Créer le fichier composer.json à l'image de composer.json.dist
+
+    cp /data/lamp/www/testa/composer.json.dist /data/lamp/www/testa/composer.json
+
+Dupliquer le fichier parameters.yml sur l'hôte
+
+    cp /data/lamp/www/testa/app/config/parameters.yml.dist /data/lamp/www/testa/app/config/parameters.yml
+
+Lancer à la racine du projet un
+
+    composer update
+
+NB: Composer va demander un token pour l'accès à certains repo privés, suivez les directives de composer.
 
 
 
