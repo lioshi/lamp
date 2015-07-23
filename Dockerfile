@@ -85,7 +85,7 @@ ADD configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
 #RUN chmod +x /phpmyadmin-setup.sh
 #RUN /phpmyadmin-setup.sh
 
-# Symfony 2
+# Symfony 2 pre requisted
 RUN apt-get -y install curl
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
