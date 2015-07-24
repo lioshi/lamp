@@ -156,7 +156,7 @@ If needed
 
 
 
-## Install testa
+# Usage for install testa's site
 
 Créer un fichier de conf apache dans le dossier /data/lamp/conf de l'hôte
 
@@ -268,5 +268,5 @@ Lancer un import des articles
 
     php app/console testa:import k4 --env=prod 
 
- 
+
 
