@@ -89,7 +89,7 @@ ADD configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
 RUN apt-get -y install curl
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
-RUN apt-get -y install php5-dev memcached php5-memcached 
+RUN apt-get -y install php5-xsl php5-dev memcached php5-memcached 
 
 
 ADD run.sh /run.sh

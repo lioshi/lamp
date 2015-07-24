@@ -201,4 +201,72 @@ Lancer à la racine du projet un
 NB: Composer va demander un token pour l'accès à certains repo privés, suivez les directives de composer.
 
 
+Déployer le site
+
+On crée la base de données
+
+    php app/console doctrine:database:create
+    php app/console doctrine:schema:update --dump-sql
+    php app/console doctrine:schema:update --force    // IMPORTANT : pour mettre à jour les entities
+
+Les assets
+
+    php app/console assets:install web --symlink
+    php app/console assetic:dump
+
+Purge du cache
+
+    php app/console cache:clear --env=prod
+    php app/console cache:clear --no-debug
+
+
+Création du dossier des médias
+
+    mkdir web/uploads
+    mkdir web/uploads/media
+    chmod -Rf 777 web/uploads
+
+Créer les dossiers de cache et de log (si besoin)
+
+    mkdir app/cache
+    mkdir app/logs
+
+A la racine de votre projet lancer:
+
+    setfacl -R -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs
+    setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs
+
+Créer un utilisateur super admin
+
+    php app/console fos:user:create admin admin@example.com admin --super-admin
+
+Créer un utilisateur type Web avec peu d'accès
+
+    php app/console fos:user:create web web@example.com web
+    php app/console fos:user:promote web ROLE_ADMIN_WEB
+
+Créer le dossier d'import K4
+
+    mkdir /data/import
+    chmod -R 777 /data/import
+    mkdir /data/import/_xmlK4Testa
+    
+Mettre quelques articles.xml à l'intérieur
+
+Créer les dossiers utiles 
+
+    mkdir /data/export
+    chmod -R 777 /data/export
+    mkdir /data/export/_exportTesta
+    chmod -R 777 /data/export/_exportTesta
+    mkdir /data/export/_exportTesta/_archive
+    chmod -R 777 /data/export/_exportTesta/_archive
+    mkdir /data/export/_mediasTesta
+    chmod -R 777 /data/export/_mediasTesta
+
+Lancer un import des articles
+
+    php app/console testa:import k4 --env=prod 
+
+ 
 
