@@ -56,8 +56,13 @@ ENV PHP_POST_MAX_SIZE 10M
 # Add dirs for manage sites (mount from host in run needeed for persistence)
 RUN mkdir /data && mkdir /data/lamp && mkdir /data/lamp/conf && mkdir /data/lamp/www 
 
+# Add dirs for mysql persistent datas
+RUN mkdir -p /var/lib/mysql
+RUN chmod -R 777 /var/lib/mysql
+RUN chown -R root:root /var/lib/mysql
+
 # Add volumes for MySQL 
-VOLUME  ["/etc/mysql", "/var/lib/mysql" ]
+VOLUME  [ "/var/lib/mysql" ]
 
 # Add volumes for sites, confs and libs and mysql from host
 # /data/lamp/conf : apache conf file
