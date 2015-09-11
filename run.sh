@@ -15,6 +15,12 @@ else
     echo "=> Using an existing volume of MySQL"
 fi
 
+# Tweaks to give Apache/PHP write permissions to the app
+chmod -R 770 /var/lib/mysql
+chmod -R 770 /var/run/mysqld
+chown -R mysql:staff /var/lib/mysql
+chown -R mysql:staff /var/run/mysqld
+    
 # Create sample site (site.loc)
 echo "SITE_SAMPLE : ${SITE_SAMPLE}"
 
