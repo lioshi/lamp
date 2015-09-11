@@ -26,6 +26,7 @@ echo ""
 echo "    mysql -uadmin -p$PASS -h<host> -P<port>"
 echo ""
 #echo "Please remember to change the above password as soon as possible!"
+echo "MySQL user 'admin' has password '$PASS'"
 echo "MySQL user 'root' has password 'root' but only allows local connections"
 echo "========================================================================"
 
