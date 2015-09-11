@@ -1,20 +1,20 @@
 FROM debian:jessie
 MAINTAINER lioshi <lioshi@lioshi.com>
 
-# Install packages
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update 
-RUN apt-get -y install supervisor apt-utils git apache2 libapache2-mod-php5 mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz nodejs npm parallel 
-
+# Tweaks to give MySQL write permissions to the app
 ENV BOOT2DOCKER_ID 1000
 ENV BOOT2DOCKER_GID 50
 
-# Tweaks to give MySQL write permissions to the app
 RUN useradd -r mysql -u ${BOOT2DOCKER_ID} && \
     usermod -G staff mysql
 
 RUN groupmod -g $(($BOOT2DOCKER_GID + 10000)) $(getent group $BOOT2DOCKER_GID | cut -d: -f1)
 RUN groupmod -g ${BOOT2DOCKER_GID} staff
+
+# Install packages
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update 
+RUN apt-get -y install supervisor apt-utils git apache2 libapache2-mod-php5 mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz nodejs npm parallel 
 
 # Install less node packages
 RUN npm install -g less  
