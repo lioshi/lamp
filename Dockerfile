@@ -5,7 +5,7 @@ MAINTAINER lioshi <lioshi@lioshi.com>
 ENV BOOT2DOCKER_ID 1000
 ENV BOOT2DOCKER_GID 50
 
-RUN useradd -r mysql -u $BOOT2DOCKER_ID && \
+RUN useradd -r mysql -u ${BOOT2DOCKER_ID} && \
     usermod -G staff mysql
 
 RUN groupmod -g $(($BOOT2DOCKER_GID + 10000)) $(getent group $BOOT2DOCKER_GID | cut -d: -f1)
