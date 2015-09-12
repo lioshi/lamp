@@ -277,3 +277,10 @@ Lancer un import des articles
     sudo docker run -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lamp:latest && \
     sudo docker exec -it lamp bash
  
+
+## Mysql Workbench usage
+
+    ifconfig docker0 
+
+get IP adresse of docker0
+In workbench use this IP and admin user with password choose in docker run -e MYSQL_PASS var 
