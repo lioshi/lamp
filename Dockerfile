@@ -2,14 +2,14 @@ FROM debian:jessie
 MAINTAINER lioshi <lioshi@lioshi.com>
 
 # Tweaks to give MySQL write permissions to the app
-ENV BOOT2DOCKER_ID 1000
-ENV BOOT2DOCKER_GID 50
-
-RUN useradd -r mysql -u ${BOOT2DOCKER_ID} && \
-    usermod -G staff mysql
-
-RUN groupmod -g $(($BOOT2DOCKER_GID + 10000)) $(getent group $BOOT2DOCKER_GID | cut -d: -f1)
-RUN groupmod -g ${BOOT2DOCKER_GID} staff
+#ENV BOOT2DOCKER_ID 1000
+#ENV BOOT2DOCKER_GID 50
+#
+#RUN useradd -r mysql -u ${BOOT2DOCKER_ID} && \
+#    usermod -G staff mysql
+#
+#RUN groupmod -g $(($BOOT2DOCKER_GID + 10000)) $(getent group $BOOT2DOCKER_GID | cut -d: -f1)
+#RUN groupmod -g ${BOOT2DOCKER_GID} staff
 
 # Install packages
 ENV DEBIAN_FRONTEND noninteractive
@@ -67,9 +67,9 @@ ENV PHP_POST_MAX_SIZE 10M
 RUN mkdir /data && mkdir /data/lamp && mkdir /data/lamp/conf && mkdir /data/lamp/www 
 
 # Add dirs for mysql persistent datas
-RUN mkdir -p /var/lib/mysql
-RUN chmod -R 777 /var/lib/mysql
-RUN chown -R root:root /var/lib/mysql
+#RUN mkdir -p /var/lib/mysql
+#RUN chmod -R 777 /var/lib/mysql
+#RUN chown -R root:root /var/lib/mysql
 
 # Add volumes for MySQL 
 VOLUME  [ "/var/lib/mysql" ]
