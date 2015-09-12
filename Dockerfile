@@ -71,8 +71,10 @@ RUN mkdir /data && mkdir /data/lamp && mkdir /data/lamp/conf && mkdir /data/lamp
 #RUN chmod -R 777 /var/lib/mysql
 #RUN chown -R root:root /var/lib/mysql
 
+RUN chown -R mysql:mysql /var/lib/mysql
+
 # Add volumes for MySQL 
-VOLUME  [ "/var/lib/mysql" ]
+VOLUME  [ "/etc/mysql", "/var/lib/mysql" ]
 
 # Add volumes for sites, confs and libs and mysql from host
 # /data/lamp/conf : apache conf file
