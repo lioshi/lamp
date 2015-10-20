@@ -43,7 +43,7 @@ Container launching (with sample site create)
 	-e MYSQL_PASS="admin" \
 	-e SITE_SAMPLE="create" \
 	--name=lamp \
-	lamp:latest
+	lioshi/lamp:latest
 
 Container launching (with sample site erase if allready exists in /data dir of host machine)
 
@@ -53,7 +53,7 @@ Container launching (with sample site erase if allready exists in /data dir of h
 	-e MYSQL_PASS="admin" \
 	-e SITE_SAMPLE="erase" \
 	--name=lamp \
-	lamp:latest
+	lioshi/lamp:latest
 
 
 # Usage for diem's site sample
@@ -82,7 +82,7 @@ Container launching
     -e MYSQL_PASS="admin" \
     --name=lamp \
     --add-host=vm20.local:91.194.100.247 \
-    lamp:latest
+    lioshi/lamp:latest
 
 Alternative launching with added hosts for container. Needed for install a diem site
 
@@ -95,7 +95,7 @@ Alternative launching with added hosts for container. Needed for install a diem 
     --add-host=sitediem2.loc:127.0.0.1 \
     --add-host=sitediem3.loc:127.0.0.1 \
     --add-host=vm20.local:91.194.100.247 \
-    lamp:latest
+    lioshi/lamp:latest
 
 ## Access container in CLI
 
@@ -268,15 +268,57 @@ Lancer un import des articles
 
     php app/console testa:import k4 --env=prod 
 
+## Elasticsearch install
+
+Container launching (with ElasticSearch link, for testa application usage)
+
+### launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations
+
+    sudo docker run -d -p 9200:9200 -p 9300:9300 \
+    -v /data/elasticsearch:/usr/share/elasticsearch/data
+    --name=elasticsearch \
+    lioshi/elasticsearch
+
+### And then launch "lioshi/lamp" image with link
+
+    sudo docker run -d -p 80:80 -p 3306:3306 \
+    -v /data:/data \
+    -v /var/lib/mysql:/var/lib/mysql \
+    -e MYSQL_PASS="admin" \
+    --link localhost:elasticsearch \
+    --name=lamp \
+    lioshi/lamp:latest
+
+### the first time run, into testa dir
+
+    php app/console fos:elastica:populate 
+
+
+
+
+
 
 
 # Linux usage
-## Launch image
+
+## Launch image for diem's sites
     sudo service docker start && \
     sudo docker rm -f lamp && \
-    sudo docker run -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lamp:latest && \
+    sudo docker run -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
     sudo docker exec -it lamp bash
- 
+
+## Launch image for testa site
+
+    sudo docker run -d -p 9200:9200 -p 9300:9300 \
+    -v /data/elasticsearch:/usr/share/elasticsearch/data
+    --name=elasticsearch \
+    lioshi/elasticsearch
+
+    sudo service docker start && \
+    sudo docker rm -f lamp && \
+    sudo docker run -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --link localhost:elasticsearch \ --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
+    sudo docker exec -it lamp bash
+
 ## Some commands
     docker ps - Lists containers.
     docker logs - Shows us the standard output of a container.
@@ -288,3 +330,18 @@ Lancer un import des articles
 
 get IP adresse of docker0
 In workbench use this IP and admin user with password choose in docker run -e MYSQL_PASS var 
+
+
+
+
+
+
+
+# Mac OSX usage
+
+## Launch image for diem's sites
+    sudo service docker start && \
+    sudo docker rm -f lamp && \
+    sudo docker run -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
+    sudo docker exec -it lamp bash
+

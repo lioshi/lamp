@@ -5,6 +5,8 @@ VOLUME_HOME="/var/lib/mysql"
 
 sed -ri -e "s/^upload_max_filesize.*/upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}/" \
     -e "s/^post_max_size.*/post_max_size = ${PHP_POST_MAX_SIZE}/" /etc/php5/apache2/php.ini
+
+# install db
 if [[ ! -d $VOLUME_HOME/mysql ]]; then
     echo "=> An empty or uninitialized MySQL volume is detected in $VOLUME_HOME"
     echo "=> Installing MySQL ..."
@@ -15,15 +17,44 @@ else
     echo "=> Using an existing volume of MySQL"
 fi
 
-# Tweaks to give Apache/PHP write permissions to the app
-#chmod -R 770 /var/lib/mysql
-#chmod -R 770 /var/run/mysqld
-#chown -R mysql:staff /var/lib/mysql
-#chown -R mysql:staff /var/run/mysqld
+
+
+# Mysql persist with cron
+echo "MYSQL_PERSIST_CRON : ${MYSQL_PERSIST_CRON}"
+if [ -z "${MYSQL_PERSIST_CRON}" ] 
+then
+  echo "No env var MYSQL_PERSIST_CRON in docker run command. Do nothing."
+else 
+  if [ "${MYSQL_PERSIST_CRON}" = "yes" ]
+  then
+    echo "Env var MYSQL_PERSIST_CRON value is yes. Launch a crontab to backup mysql dir."
+    if [ -z "${MYSQL_PASS}" ] 
+    then
+      PASS="admin"
+    else 
+      PASS=${MYSQL_PASS}
+    fi
+    
+
+# http://www.ekito.fr/people/run-a-cron-job-with-docker/
+# écrire un fichier de cron qui est mappé
+
+    echo "* * * * * mysqldump -u admin -p$PASS --all-databases > /data/all_dbs.sql
+    " >> mycron
+    crontab mycron
+    rm mycron
+    cron    # launch cron exec job
+ 
+  else
+    echo "Env var MYSQL_PERSIST_CRON value must be with yes. Do nothing."
+  fi
+fi
+
+  
+
     
 # Create sample site (site.loc)
 echo "SITE_SAMPLE : ${SITE_SAMPLE}"
-
 if [ -z "${SITE_SAMPLE}" ] 
 then
 	echo "No env var SITE_SAMPLE in docker run command. Do nothing."
