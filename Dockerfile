@@ -112,9 +112,8 @@ RUN apt-get -y install php5-xsl php5-dev memcached php5-memcached
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
 
-
-
 EXPOSE 80 3306
-CMD ["/run.sh"] 
+
+CMD ["/run.sh"]
 
 

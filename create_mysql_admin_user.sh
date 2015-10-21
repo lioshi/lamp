@@ -17,7 +17,7 @@ else
   PASS=${MYSQL_PASS}
 fi
 
-_word=$( [ ${MYSQL_PASS} ] && echo "preset" || echo "random" )
+_word=$( [ ${MYSQL_PASS} ] && echo "preset" || echo "default" )
 echo "=> Creating MySQL admin user with ${_word} password"
 
 mysql -uroot -e "CREATE USER 'admin'@'%' IDENTIFIED BY '$PASS'"
@@ -37,8 +37,53 @@ echo "MySQL user 'root' has password 'root' but only allows local connections"
 echo "========================================================================"
 
 
-# phpmyadmin configuration
 
+
+
+
+# Mysql persist with cron
+echo "MYSQL_PERSIST_BY_CRON : "
+if [ -z "${MYSQL_PERSIST_BY_CRON}" ] 
+then
+  echo "No env var MYSQL_PERSIST_BY_CRON in docker run command. Do nothing."
+else 
+  if [ "${MYSQL_PERSIST_BY_CRON}" = "yes" ]
+  then
+    echo "Env var MYSQL_PERSIST_BY_CRON value is yes. Launch a crontab to backup mysql dir."
+    # get pass used in docker run or default admin pass
+    if [ -z "${MYSQL_PASS}" ] 
+    then
+      PASS="admin"
+    else 
+      PASS=${MYSQL_PASS}
+    fi
+
+    # restore database if exits file
+    if [ ! -f /data/MYSQL_PERSIST_BY_CRON_all_dbs.sql ]; then
+      echo "No file /data/MYSQL_PERSIST_BY_CRON_all_dbs.sql. Use an empty mysql server."
+    else
+      echo "File /data/MYSQL_PERSIST_BY_CRON_all_dbs.sql exists. Use it to restore all databases."
+      mysql -u admin -p$PASS < /data/MYSQL_PERSIST_BY_CRON_all_dbs.sql
+    fi
+    
+    # backup all database all minute by cron rask
+    echo "* * * * * mysqldump -u admin -p$PASS --all-databases > /data/MYSQL_PERSIST_BY_CRON_all_dbs.sql
+    " >> mycron
+    crontab mycron
+    rm mycron
+    cron    # launch cron exec job
+ 
+  else
+    echo "Env var MYSQL_PERSIST_BY_CRON value must be with yes. Do nothing."
+  fi
+fi
+
+
+
+
+
+
+# phpmyadmin configuration
 # Change the MySQL root password
 mysqladmin -u root password root
 

@@ -17,44 +17,10 @@ else
     echo "=> Using an existing volume of MySQL"
 fi
 
-
-
-# Mysql persist with cron
-echo "MYSQL_PERSIST_CRON : ${MYSQL_PERSIST_CRON}"
-if [ -z "${MYSQL_PERSIST_CRON}" ] 
-then
-  echo "No env var MYSQL_PERSIST_CRON in docker run command. Do nothing."
-else 
-  if [ "${MYSQL_PERSIST_CRON}" = "yes" ]
-  then
-    echo "Env var MYSQL_PERSIST_CRON value is yes. Launch a crontab to backup mysql dir."
-    if [ -z "${MYSQL_PASS}" ] 
-    then
-      PASS="admin"
-    else 
-      PASS=${MYSQL_PASS}
-    fi
-    
-
-# http://www.ekito.fr/people/run-a-cron-job-with-docker/
-# écrire un fichier de cron qui est mappé
-
-    echo "* * * * * mysqldump -u admin -p$PASS --all-databases > /data/all_dbs.sql
-    " >> mycron
-    crontab mycron
-    rm mycron
-    cron    # launch cron exec job
- 
-  else
-    echo "Env var MYSQL_PERSIST_CRON value must be with yes. Do nothing."
-  fi
-fi
-
-  
-
     
 # Create sample site (site.loc)
-echo "SITE_SAMPLE : ${SITE_SAMPLE}"
+echo "========================================================================"
+echo "SITE_SAMPLE : "
 if [ -z "${SITE_SAMPLE}" ] 
 then
 	echo "No env var SITE_SAMPLE in docker run command. Do nothing."
@@ -83,8 +49,10 @@ else
 fi
 
 
-
-
-
+# supervisord
+echo "========================================================================"
+echo "Supervisord launchs: "
 exec supervisord -n -c /etc/supervisor/supervisord.conf
+
+
 
