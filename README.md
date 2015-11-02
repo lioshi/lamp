@@ -309,10 +309,7 @@ Container launching (with ElasticSearch link, for testa application usage)
 
 ## Launch image for testa site
 
-    sudo docker run -d -p 9200:9200 -p 9300:9300 \
-    -v /data/elasticsearch:/usr/share/elasticsearch/data
-    --name=elasticsearch \
-    lioshi/elasticsearch
+    sudo docker run -d -p 9200:9200 -p 9300:9300 -v /data/elasticsearch:/usr/share/elasticsearch/data --name=elasticsearch lioshi/elasticsearch
 
     sudo service docker start && \
     sudo docker rm -f lamp && \
