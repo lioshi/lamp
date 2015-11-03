@@ -14,12 +14,7 @@ MAINTAINER lioshi <lioshi@lioshi.com>
 # Install packages
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update --fix-missing
-RUN apt-get -y install supervisor apt-utils git apache2 libapache2-mod-php5 mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz nodejs npm parallel cron
-
-# Install less node packages
-RUN npm install -g less  
-RUN npm install -g less-plugin-autoprefix 
-RUN npm install -g less-plugin-group-css-media-queries
+RUN apt-get -y install supervisor apt-utils git apache2 libapache2-mod-php5 mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz parallel cron
 
 #Install imagick
 RUN apt-get -y install imagemagick php5-imagick 
