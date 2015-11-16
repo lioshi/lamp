@@ -307,6 +307,10 @@ Container launching (with ElasticSearch link, for testa application usage)
     sudo docker run -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
     sudo docker exec -it lamp bash
 
+    sudo service docker start && \
+    sudo docker run -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
+    sudo docker exec -it lamp bash
+
 ## Launch image for testa site
 
     sudo service docker start && sudo docker rm -f elasticsearch && sudo docker run -d -p 9200:9200 -p 9300:9300 -v /data/elasticsearch:/usr/share/elasticsearch/data --name=elasticsearch lioshi/elasticsearch
