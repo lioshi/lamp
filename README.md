@@ -275,7 +275,7 @@ Container launching (with ElasticSearch link, for testa application usage)
 ### launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations
 
     sudo docker run --privileged=true -d -p 9200:9200 -p 9300:9300 \
-    -v /data/elasticsearch:/usr/share/elasticsearch/data
+    --volume /usr/share/elasticsearch/data
     --name=elasticsearch \
     lioshi/elasticsearch
 
