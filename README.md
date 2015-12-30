@@ -22,7 +22,7 @@ Create local datas. Create host directories.
     mkdir /data/lamp 
     mkdir /data/lamp/conf 
     mkdir /data/lamp/www 
-
+    
 Directory */data/lamp/conf* contains apache conf files for each site
 
 Directory */data/lamp/www* contains site's source's file
@@ -37,7 +37,7 @@ Run docker service
 
 Container launching (with sample site create)
 
-	sudo docker run -d -p 80:80 -p 3306:3306 \
+	sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 \
 	-v /data:/data \
 	--volume /var/lib/mysql \
 	-e MYSQL_PASS="admin" \
@@ -47,7 +47,7 @@ Container launching (with sample site create)
 
 Container launching (with sample site erase if allready exists in /data dir of host machine)
 
-	sudo docker run -d -p 80:80 -p 3306:3306 \
+	sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 \
 	-v /data:/data \
 	--volume /var/lib/mysql \
 	-e MYSQL_PASS="admin" \
@@ -76,7 +76,7 @@ Directory */data/lamp/www* contains site's source's file
 
 Container launching
 	
-    sudo docker run -d -p 80:80 -p 3306:3306 \
+    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 \
     -v /data:/data \
     --volume /var/lib/mysql \
     -e MYSQL_PASS="admin" \
@@ -86,7 +86,7 @@ Container launching
 
 Alternative launching with added hosts for container. Needed for install a diem site
 
-    sudo docker run -d -p 80:80 -p 3306:3306 \
+    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 \
     -v /data:/data \
     --volume /var/lib/mysql \
     -e MYSQL_PASS="admin" \
@@ -116,7 +116,7 @@ Etc...
 
 Sample for an sitediem2.loc site
 
-	mkdir /data/lamp/www/sitediem2 && \
+    mkdir /data/lamp/www/sitediem2 && \
     cd /data/lamp/www/sitediem2 && \
     php /data/gitlibs/diem/install && \
     php /data/lamp/www/sitediem2/symfony theme:install && \
@@ -131,8 +131,8 @@ Sample for an sitediem2.loc site
 
 See status
 	
-	apachectl status
-	apachectl configtest
+    apachectl status
+    apachectl configtest
 
 ## PhpMyAdmin access
 
@@ -141,7 +141,7 @@ http://localhost/phpmyadmin
 ## Xdebug usage
 Install package Xdebug
 
-	apt-get -y install php5-xdebug
+    apt-get -y install php5-xdebug
     find / -name 'xdebug.so' 2> /dev/null
     
 Add extension to php.ini
@@ -274,14 +274,14 @@ Container launching (with ElasticSearch link, for testa application usage)
 
 ### launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations
 
-    sudo docker run -d -p 9200:9200 -p 9300:9300 \
+    sudo docker run --privileged=true -d -p 9200:9200 -p 9300:9300 \
     -v /data/elasticsearch:/usr/share/elasticsearch/data
     --name=elasticsearch \
     lioshi/elasticsearch
 
 ### And then launch "lioshi/lamp" image with link
 
-    sudo docker run -d -p 80:80 -p 3306:3306 \
+    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 \
     -v /data:/data \
     --volume /var/lib/mysql \
     -e MYSQL_PASS="admin" \
@@ -304,20 +304,20 @@ Container launching (with ElasticSearch link, for testa application usage)
 ## Launch image for diem's sites
     sudo service docker start && \
     sudo docker rm -f lamp && \
-    sudo docker run -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
+    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data --volume /var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
     sudo docker exec -it lamp bash
 
     sudo service docker start && \
-    sudo docker run -d -p 80:80 -p 3306:3306 -v /data:/data --volume /var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
+    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data --volume /var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
     sudo docker exec -it lamp bash
 
 ## Launch image for testa site
 
-    sudo service docker start && sudo docker rm -f elasticsearch && sudo docker run -d -p 9200:9200 -p 9300:9300 -v /data/elasticsearch:/usr/share/elasticsearch/data --name=elasticsearch lioshi/elasticsearch
+    sudo service docker start && sudo docker rm -f elasticsearch && sudo docker run --privileged=true -d -p 9200:9200 -p 9300:9300 -v /data/elasticsearch:/usr/share/elasticsearch/data --name=elasticsearch lioshi/elasticsearch
 
     sudo service docker start && \
     sudo docker rm -f lamp && \
-    sudo docker run -d -p 80:80 -p 3306:3306 -v /data:/data --volume /var/lib/mysql -e MYSQL_PASS="admin" --link elasticsearch --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
+    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data --volume /var/lib/mysql -e MYSQL_PASS="admin" --link elasticsearch --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
     sudo docker exec -it lamp bash
 
 ## Some commands
