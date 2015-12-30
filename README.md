@@ -283,7 +283,7 @@ Container launching (with ElasticSearch link, for testa application usage)
 
     sudo docker run -d -p 80:80 -p 3306:3306 \
     -v /data:/data \
-    ---volume /var/lib/mysql \
+    --volume /var/lib/mysql \
     -e MYSQL_PASS="admin" \
     --link localhost:elasticsearch \
     --name=lamp \
@@ -340,7 +340,16 @@ In workbench use this IP and admin user with password choose in docker run -e MY
 
 # Mac OSX / Windows usage
 
-## Launch image for diem's sites
+## Launch image for diem's sites with data volume
+
+	sudo service docker start && \
+	sudo docker rm -f lamp && \
+	sudo docker run -d -p 80:80 -p 3306:3306 -v /data:/data --volume /var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
+	sudo docker exec -it lamp bash
+	
+
+
+## Launch image for diem's sites (deprecated)
 No persist mysql db via volume host/container possible with restriction of permissions between host -> VM -> container 
 Then no persitence with volume used: 
     
