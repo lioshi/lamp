@@ -201,7 +201,7 @@ Lancer à la racine du projet un
 NB: Composer va demander un token pour l'accès à certains repo privés, suivez les directives de composer.
 
 
-Déployer le site
+## Déployer le site
 
 On crée la base de données
 
