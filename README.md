@@ -179,7 +179,7 @@ Créer un fichier de conf apache dans le dossier /data/lamp/conf de l'hôte
 
 Et ajouter dans le /etc/hosts de l'hôte
 
-    127.0.0.1   sf2.loc
+    127.0.0.1   testa.loc
 
 Cloner https://github.com/SidPresse/testa.git (ou un fork si vous n'avez pas accès) dans le dossier /data/lamp/www de l'hôte
 
