@@ -207,7 +207,7 @@ Container launching (with ElasticSearch link, for testa application usage)
     -v /data:/data \
     -v /var/lib/mysql:/var/lib/mysql \
     -e MYSQL_PASS="admin" \
-    --link localhost:elasticsearch \
+    --link elasticsearch \
     --name=lamp \
     lioshi/lamp:latest
 
