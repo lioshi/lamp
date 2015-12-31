@@ -1,3 +1,34 @@
+<!-- MarkdownTOC -->
+
+- [Lamp](#lamp)
+- [Usage for site sample](#usage-for-site-sample)
+    - [Launch container](#launch-container)
+- [Usage for diem's site sample](#usage-for-diems-site-sample)
+    - [Launch container](#launch-container-1)
+    - [Access container in CLI](#access-container-in-cli)
+    - [Install diem site](#install-diem-site)
+    - [Erase container](#erase-container)
+    - [Apache2 controls](#apache2-controls)
+    - [PhpMyAdmin access](#phpmyadmin-access)
+    - [Xdebug usage](#xdebug-usage)
+- [Usage for install testa's site](#usage-for-install-testas-site)
+    - [Déployer le site](#déployer-le-site)
+    - [Elasticsearch install](#elasticsearch-install)
+        - [launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations](#launch-previously-lioshielasticsearch-image-with-directory-in-host-to-persist-elasticsearch-indexations)
+        - [And then launch "lioshi/lamp" image with link](#and-then-launch-lioshilamp-image-with-link)
+        - [the first time run, into testa dir](#the-first-time-run-into-testa-dir)
+- [Linux usage](#linux-usage)
+    - [Launch image for diem's sites](#launch-image-for-diems-sites)
+    - [Launch image for testa site](#launch-image-for-testa-site)
+    - [Some commands](#some-commands)
+    - [Mysql Workbench usage](#mysql-workbench-usage)
+- [Mac OSX / Windows usage](#mac-osx--windows-usage)
+    - [Launch image for diem's sites with data volume (TO BE TESTED)](#launch-image-for-diems-sites-with-data-volume-to-be-tested)
+    - [Launch image for diem's sites (WORKED)](#launch-image-for-diems-sites-worked)
+
+<!-- /MarkdownTOC -->
+
+
 # Lamp
 Docker image for diem sites. Debian with LAMP, nodeJs, imagick... etc
 
