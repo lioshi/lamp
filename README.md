@@ -12,11 +12,12 @@
     - [PhpMyAdmin access](#phpmyadmin-access)
     - [Xdebug usage](#xdebug-usage)
 - [Usage for install testa's site](#usage-for-install-testas-site)
-    - [Déployer le site](#déployer-le-site)
     - [Elasticsearch install](#elasticsearch-install)
         - [launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations](#launch-previously-lioshielasticsearch-image-with-directory-in-host-to-persist-elasticsearch-indexations)
         - [And then launch "lioshi/lamp" image with link](#and-then-launch-lioshilamp-image-with-link)
         - [the first time run, into testa dir](#the-first-time-run-into-testa-dir)
+    - [Testa install](#testa-install)
+    - [Déployer le site](#déployer-le-site)
 - [Linux usage](#linux-usage)
     - [Launch image for diem's sites](#launch-image-for-diems-sites)
     - [Launch image for testa site](#launch-image-for-testa-site)
@@ -189,6 +190,33 @@ If needed
 
 # Usage for install testa's site
 
+## Elasticsearch install
+
+Container launching (with ElasticSearch link, for testa application usage)
+
+### launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations
+
+    sudo docker run --privileged=true -d -p 9200:9200 -p 9300:9300 \
+    -v /data/elasticsearch:/usr/share/elasticsearch/data
+    --name=elasticsearch \
+    lioshi/elasticsearch
+
+### And then launch "lioshi/lamp" image with link
+
+    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 \
+    -v /data:/data \
+    -v /var/lib/mysql:/var/lib/mysql \
+    -e MYSQL_PASS="admin" \
+    --link localhost:elasticsearch \
+    --name=lamp \
+    lioshi/lamp:latest
+
+### the first time run, into testa dir
+
+    php app/console fos:elastica:populate 
+
+## Testa install
+
 Créer un fichier de conf apache dans le dossier /data/lamp/conf de l'hôte
 
     <VirtualHost *:80>
@@ -299,30 +327,6 @@ Lancer un import des articles
 
     php app/console testa:import k4 --env=prod 
 
-## Elasticsearch install
-
-Container launching (with ElasticSearch link, for testa application usage)
-
-### launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations
-
-    sudo docker run --privileged=true -d -p 9200:9200 -p 9300:9300 \
-    -v /data/elasticsearch:/usr/share/elasticsearch/data
-    --name=elasticsearch \
-    lioshi/elasticsearch
-
-### And then launch "lioshi/lamp" image with link
-
-    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 \
-    -v /data:/data \
-    -v /var/lib/mysql:/var/lib/mysql \
-    -e MYSQL_PASS="admin" \
-    --link localhost:elasticsearch \
-    --name=lamp \
-    lioshi/lamp:latest
-
-### the first time run, into testa dir
-
-    php app/console fos:elastica:populate 
 
 
 
