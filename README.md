@@ -15,6 +15,7 @@
     - [Elasticsearch install](#elasticsearch-install)
         - [launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations](#launch-previously-lioshielasticsearch-image-with-directory-in-host-to-persist-elasticsearch-indexations)
         - [And then launch "lioshi/lamp" image with link](#and-then-launch-lioshilamp-image-with-link)
+        - [Access lamp container](#access-lamp-container)
         - [the first time run, into testa dir](#the-first-time-run-into-testa-dir)
     - [Testa install](#testa-install)
     - [Déployer le site](#déployer-le-site)
@@ -211,6 +212,10 @@ Container launching (with ElasticSearch link, for testa application usage)
     --name=lamp \
     lioshi/lamp:latest
 
+### Access lamp container
+
+    sudo docker exec -it lamp bash
+
 ### the first time run, into testa dir
 
     php app/console fos:elastica:populate 
@@ -307,8 +312,8 @@ Créer un utilisateur type Web avec peu d'accès
 Créer le dossier d'import K4
 
     mkdir /data/import
-    chmod -R 777 /data/import
     mkdir /data/import/_xmlK4Testa
+    chmod -R 777 /data/import
     
 Mettre quelques articles.xml à l'intérieur
 
