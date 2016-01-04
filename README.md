@@ -26,7 +26,7 @@
     - [Mysql Workbench usage](#mysql-workbench-usage)
 - [Mac OSX / Windows usage](#mac-osx--windows-usage)
     - [Launch image for diem's sites with data volume (TO BE TESTED)](#launch-image-for-diems-sites-with-data-volume-to-be-tested)
-    - [Launch image for diem's sites (WORKED)](#launch-image-for-diems-sites-worked)
+    - [Launch image for diem's sites (WORKED, normaly)](#launch-image-for-diems-sites-worked-normaly)
 
 <!-- /MarkdownTOC -->
 
@@ -212,6 +212,12 @@ Container launching (with ElasticSearch link, for testa application usage)
     --name=lamp \
     lioshi/lamp:latest
 
+NB: for information the link *elasticsearch* is used into config.yml file into testa : 
+    
+    fos_elastica:
+        clients:
+            default: { host: elasticsearch, port: 9200 }
+
 ### Access lamp container
 
     sudo docker exec -it lamp bash
@@ -263,6 +269,15 @@ Lancer à la racine du projet un
     composer update
 
 NB: Composer va demander un token pour l'accès à certains repo privés, suivez les directives de composer.
+
+
+Si problème de config avec composer update, ou alors pour gagner du temps car le composer update demande beaucoup de temps pour "puller" tous les vendors nécessaires de packagist:
+
+    tar -xzvf vendor.tar.gz
+
+Mettra une version qui fonctionne (en date du fichier) de tous les vendors nécessaires. Un `composer update` peut être lancé ensuite, il sera plus rapide.
+
+
 
 
 ## Déployer le site
@@ -389,7 +404,7 @@ In workbench use this IP and admin user with password choose in docker run -e MY
 	
 
 
-## Launch image for diem's sites (WORKED)
+## Launch image for diem's sites (WORKED, normaly)
 No persist mysql db via volume host/container possible with restriction of permissions between host -> VM -> container 
 Then no persitence with volume used: 
     
