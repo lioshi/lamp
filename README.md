@@ -64,6 +64,8 @@ Add host locally (in your /etc/hosts file)
 
 	127.0.0.1   site.loc 
 
+On Mac OSX : the host Ip will be the IP you will be given when you'll start the Docker Quickstart terminal (IP of the "default" machine)
+
 Run docker service
 
 	sudo service docker start
