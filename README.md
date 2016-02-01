@@ -21,6 +21,7 @@
     - [Déployer le site](#déployer-le-site)
 - [Linux usage](#linux-usage)
     - [Launch image for diem's sites](#launch-image-for-diems-sites)
+        - [Without remove lamp container](#without-remove-lamp-container)
     - [Launch image for testa site](#launch-image-for-testa-site)
     - [Some commands](#some-commands)
     - [Mysql Workbench usage](#mysql-workbench-usage)
@@ -365,6 +366,7 @@ Lancer un import des articles
     sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
     sudo docker exec -it lamp bash
 
+### Without remove lamp container
     sudo service docker start && \
     sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
     sudo docker exec -it lamp bash
