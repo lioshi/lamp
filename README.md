@@ -281,7 +281,9 @@ Si problème de config avec composer update, ou alors pour gagner du temps car l
 
 Mettra une version qui fonctionne (en date du fichier) de tous les vendors nécessaires. Un `composer update` peut être lancé ensuite, il sera plus rapide.
 
+Pour remmettre dans le repo une archive de vendors (decoupee en fichier de 50mo: limite de github) à jour:
 
+    split -b 50000k vendors.tar.gz
 
 
 ## Déployer le site
