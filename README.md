@@ -216,9 +216,11 @@ Container launching (with ElasticSearch link, for testa application usage)
     -v /var/lib/mysql:/var/lib/mysql \
     -e MYSQL_PASS="admin" \
     --link elasticsearch \
-    --link memcached \
+    --link memcached:memcached \
     --name=lamp \
     lioshi/lamp:latest
+
+    sudo docker exec -it lamp bash
 
 NB: for information the link *elasticsearch* is used into config.yml file into testa : 
     
