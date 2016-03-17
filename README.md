@@ -14,6 +14,7 @@
 - [Usage for install testa's site](#usage-for-install-testas-site)
     - [Elasticsearch install](#elasticsearch-install)
         - [launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations](#launch-previously-lioshielasticsearch-image-with-directory-in-host-to-persist-elasticsearch-indexations)
+        - [launch previously "lioshi/memcached" image](#launch-previously-lioshimemcached-image)
         - [And then launch "lioshi/lamp" image with link](#and-then-launch-lioshilamp-image-with-link)
         - [Access lamp container](#access-lamp-container)
         - [the first time run, into testa dir](#the-first-time-run-into-testa-dir)
@@ -21,7 +22,6 @@
     - [Déployer le site](#déployer-le-site)
 - [Linux usage](#linux-usage)
     - [Launch image for diem's sites](#launch-image-for-diems-sites)
-        - [Without remove lamp container](#without-remove-lamp-container)
     - [Launch image for testa site](#launch-image-for-testa-site)
     - [Some commands](#some-commands)
     - [Mysql Workbench usage](#mysql-workbench-usage)
@@ -205,6 +205,10 @@ Container launching (with ElasticSearch link, for testa application usage)
     --name=elasticsearch \
     lioshi/elasticsearch
 
+### launch previously "lioshi/memcached" image 
+
+    sudo docker run --name memcached -p 11211:11211 -d lioshi/memcached
+
 ### And then launch "lioshi/lamp" image with link
 
     sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 \
@@ -212,6 +216,7 @@ Container launching (with ElasticSearch link, for testa application usage)
     -v /var/lib/mysql:/var/lib/mysql \
     -e MYSQL_PASS="admin" \
     --link elasticsearch \
+    --link memcached \
     --name=lamp \
     lioshi/lamp:latest
 
@@ -363,23 +368,18 @@ Lancer un import des articles
 # Linux usage
 
 ## Launch image for diem's sites
-    sudo service docker start && \
-    sudo docker rm -f lamp && \
     sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
-    sudo docker exec -it lamp bash
 
-### Without remove lamp container
-    sudo service docker start && \
-    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
     sudo docker exec -it lamp bash
 
 ## Launch image for testa site
 
-    sudo service docker start && sudo docker rm -f elasticsearch && sudo docker run --privileged=true -d -p 9200:9200 -p 9300:9300 -v /data/elasticsearch:/usr/share/elasticsearch/data --name=elasticsearch lioshi/elasticsearch
+    sudo docker run --privileged=true -d -p 9200:9200 -p 9300:9300 -v /data/elasticsearch:/usr/share/elasticsearch/data --name=elasticsearch lioshi/elasticsearch
 
-    sudo service docker start && \
-    sudo docker rm -f lamp && \
-    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --link elasticsearch --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
+    sudo docker run --name memcached -p 11211:11211 -d lioshi/memcached
+
+    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --link elasticsearch --link memcached --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
+
     sudo docker exec -it lamp bash
 
 ## Some commands
