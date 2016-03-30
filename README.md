@@ -283,8 +283,8 @@ NB: Composer va demander un token pour l'accès à certains repo privés, suivez
 
 Si problème de config avec composer update, ou alors pour gagner du temps car le composer update demande beaucoup de temps pour "puller" tous les vendors nécessaires de packagist:
 
-    cat vendor.tar.gz-* > vendor.tar.gz
-    tar -xzvf vendor.tar.gz
+    cat vendors.tar.gz-* > vendors.tar.gz
+    tar -xzvf vendors.tar.gz
 
 Mettra une version qui fonctionne (en date du fichier) de tous les vendors nécessaires. Un `composer update` peut être lancé ensuite, il sera plus rapide.
 
@@ -368,6 +368,8 @@ Lancer un import des articles
 
 
 # Linux usage
+
+    sudo service docker start
 
 ## Launch image for diem's sites
     sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
