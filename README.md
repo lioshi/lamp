@@ -26,8 +26,8 @@
     - [Some commands](#some-commands)
     - [Mysql Workbench usage](#mysql-workbench-usage)
 - [Mac OSX / Windows usage](#mac-osx--windows-usage)
-    - [Launch image for diem's sites with data volume (TO BE TESTED)](#launch-image-for-diems-sites-with-data-volume-to-be-tested)
-    - [Launch image for diem's sites (WORKED, normaly)](#launch-image-for-diems-sites-worked-normaly)
+    - [Launch image for diem's sites with data volume \(TO BE TESTED\)](#launch-image-for-diems-sites-with-data-volume-to-be-tested)
+    - [Launch image for diem's sites \(WORKED, normaly\)](#launch-image-for-diems-sites-worked-normaly)
 
 <!-- /MarkdownTOC -->
 
@@ -372,7 +372,7 @@ Lancer un import des articles
     sudo service docker start
 
 ## Launch image for diem's sites
-    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
+    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
 
     sudo docker exec -it lamp bash
 
