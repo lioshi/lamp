@@ -246,6 +246,50 @@ Créer un fichier de conf apache dans le dossier /data/lamp/conf de l'hôte
       AddType         application/x-httpd-php .php
       DirectoryIndex  app.php
     <Directory /data/lamp/www/testa/web>
+        
+    # Add correct content-type for fonts
+    AddType application/vnd.ms-fontobject .eot
+    AddType application/x-font-ttf .ttf
+    AddType application/x-font-opentype .otf
+    AddType application/x-font-woff .woff
+    AddType image/svg+xml .svg
+    
+    # add deflate
+    <IfModule mod_deflate.c>
+      # compress text, html, javascript, css, xml:
+      AddOutputFilterByType DEFLATE text/plain
+      AddOutputFilterByType DEFLATE text/html
+      AddOutputFilterByType DEFLATE text/xml
+      AddOutputFilterByType DEFLATE text/css
+      AddOutputFilterByType DEFLATE application/xml
+      AddOutputFilterByType DEFLATE application/xhtml+xml
+      AddOutputFilterByType DEFLATE application/rss+xml
+      AddOutputFilterByType DEFLATE application/javascript
+      AddOutputFilterByType DEFLATE application/x-javascript
+      # Compress compressible fonts
+      AddOutputFilterByType DEFLATE application/x-font-ttf application/x-font-opentype image/svg+xml
+    </IfModule>
+    
+    # Add expiration dates to static content
+    # sudo a2enmod expires && sudo apache2ctl restart
+    <IfModule mod_expires.c>
+      ExpiresActive On
+      ExpiresByType image/gif "access plus 1 year"
+      ExpiresByType image/png "access plus 1 year"
+      ExpiresByType image/jpg "access plus 1 year"
+      ExpiresByType image/jpeg "access plus 1 year"
+      ExpiresByType image/png "access plus 1 year"
+      ExpiresByType image/x-icon "access plus 1 year"
+      ExpiresByType image/svg+xml "access plus 1 year"  
+      ExpiresByType text/css "access plus 1 year"
+      ExpiresByType text/javascript "access plus 1 year"
+      ExpiresByType application/x-Shockwave-Flash "access plus 1 year"
+      ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
+      ExpiresByType application/x-font-ttf "access plus 1 year"
+      ExpiresByType application/x-font-opentype "access plus 1 year"
+      ExpiresByType application/x-font-woff "access plus 1 year"
+    </IfModule>
+    
     <IfModule mod_rewrite.c>
         RewriteEngine On
         #<IfModule mod_vhost_alias.c>
