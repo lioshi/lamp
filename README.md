@@ -71,9 +71,15 @@ Run docker service
 
 	sudo service docker start
 
+Ajouter user au group docker
+
+    groupadd docker
+    sudo usermod -aG docker $USER
+    exit    
+
 Container launching (with sample site create)
 
-	sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 \
+	docker run --privileged=true -d -p 80:80 -p 3306:3306 \
 	-v /data:/data \
 	-v /var/lib/mysql:/var/lib/mysql \
 	-e MYSQL_PASS="admin" \
@@ -83,7 +89,7 @@ Container launching (with sample site create)
 
 Container launching (with sample site erase if allready exists in /data dir of host machine)
 
-	sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 \
+	docker run --privileged=true -d -p 80:80 -p 3306:3306 \
 	-v /data:/data \
 	-v /var/lib/mysql:/var/lib/mysql \
 	-e MYSQL_PASS="admin" \
@@ -112,7 +118,7 @@ Directory */data/lamp/www* contains site's source's file
 
 Container launching
 	
-    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 \
+    docker run --privileged=true -d -p 80:80 -p 3306:3306 \
     -v /data:/data \
     -v /var/lib/mysql:/var/lib/mysql \
     -e MYSQL_PASS="admin" \
@@ -122,7 +128,7 @@ Container launching
 
 Alternative launching with added hosts for container. Needed for install a diem site
 
-    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 \
+    docker run --privileged=true -d -p 80:80 -p 3306:3306 \
     -v /data:/data \
     -v /var/lib/mysql:/var/lib/mysql \
     -e MYSQL_PASS="admin" \
@@ -137,7 +143,7 @@ Alternative launching with added hosts for container. Needed for install a diem 
 
 Command line access of previous container
 
-    sudo docker exec -it lamp bash
+    docker exec -it lamp bash
 
 ## Install diem site
 
@@ -161,7 +167,7 @@ Sample for an sitediem2.loc site
 
 ## Erase container
 
-    sudo docker rm -f lamp
+    docker rm -f lamp
 
 ## Apache2 controls
 
@@ -200,18 +206,18 @@ Container launching (with ElasticSearch link, for testa application usage)
 
 ### launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations
 
-    sudo docker run --privileged=true -d -p 9200:9200 -p 9300:9300 \
+    docker run --privileged=true -d -p 9200:9200 -p 9300:9300 \
     -v /data/elasticsearch:/usr/share/elasticsearch/data \
     --name=elasticsearch \
     lioshi/elasticsearch
 
 ### launch previously "lioshi/memcached" image 
 
-    sudo docker run --name memcached -p 11211:11211 -d lioshi/memcached
+    docker run --name memcached -p 11211:11211 -d lioshi/memcached
 
 ### And then launch "lioshi/lamp" image with link
 
-    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 \
+    docker run --privileged=true -d -p 80:80 -p 3306:3306 \
     -v /data:/data \
     -v /var/lib/mysql:/var/lib/mysql \
     -e MYSQL_PASS="admin" \
@@ -220,7 +226,7 @@ Container launching (with ElasticSearch link, for testa application usage)
     --name=lamp \
     lioshi/lamp:latest
 
-    sudo docker exec -it lamp bash
+    docker exec -it lamp bash
 
 NB: for information the link *elasticsearch* is used into config.yml file into testa : 
     
@@ -230,7 +236,7 @@ NB: for information the link *elasticsearch* is used into config.yml file into t
 
 ### Access lamp container
 
-    sudo docker exec -it lamp bash
+    docker exec -it lamp bash
 
 ### the first time run, into testa dir
 
@@ -416,19 +422,19 @@ Lancer un import des articles
     sudo service docker start
 
 ## Launch image for diem's sites
-    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
+    docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
 
-    sudo docker exec -it lamp bash
+    docker exec -it lamp bash
 
 ## Launch image for testa site
 
-    sudo docker run --privileged=true -d -p 9200:9200 -p 9300:9300 -v /data/elasticsearch:/usr/share/elasticsearch/data --name=elasticsearch lioshi/elasticsearch
+    docker run --privileged=true -d -p 9200:9200 -p 9300:9300 -v /data/elasticsearch:/usr/share/elasticsearch/data --name=elasticsearch lioshi/elasticsearch
 
-    sudo docker run --name memcached -p 11211:11211 -d lioshi/memcached
+    docker run --name memcached -p 11211:11211 -d lioshi/memcached
 
-    sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --link elasticsearch --link memcached --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
+    docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --link elasticsearch --link memcached --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
 
-    sudo docker exec -it lamp bash
+    docker exec -it lamp bash
 
 ## Some commands
     docker ps - Lists containers.
@@ -453,9 +459,9 @@ In workbench use this IP and admin user with password choose in docker run -e MY
 ## Launch image for diem's sites with data volume (TO BE TESTED)
 
 	sudo service docker start && \
-	sudo docker rm -f lamp && \
-	sudo docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
-	sudo docker exec -it lamp bash
+	docker rm -f lamp && \
+	docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
+	docker exec -it lamp bash
 	
 
 
@@ -473,7 +479,7 @@ And when image is run then restore all databases if file saved by cron exists.
 Then launch those commands
 
     sudo service docker start && \
-    sudo docker rm -f lamp && \
-    sudo docker run -d -p 80:80 -p 3306:3306 -v /data:/data -e MYSQL_PERSIST_BY_CRON="yes" -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
-    sudo docker exec -it lamp bash
+    docker rm -f lamp && \
+    docker run -d -p 80:80 -p 3306:3306 -v /data:/data -e MYSQL_PERSIST_BY_CRON="yes" -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
+    docker exec -it lamp bash
 
