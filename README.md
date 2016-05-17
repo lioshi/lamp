@@ -150,7 +150,7 @@ Command line access of previous container
 Into CLI of container to install a new diem site:
 
 Create directory of site into /data/lamp/www/
-Into this dir launch 
+Into this dir launch your local diem, example:
 
     php /data/lamp/lib/dien/install
 
