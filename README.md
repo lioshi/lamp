@@ -189,6 +189,8 @@ Install package Xdebug
 Add extension to php.ini
 
     echo 'zend_extension="/usr/lib/php5/20131226/xdebug.so"' >> /etc/php5/apache2/php.ini 
+    echo 'display_errors = On' >> /etc/php5/apache2/php.ini 
+    echo 'html_errors = On' >> /etc/php5/apache2/php.ini 
     apachectl restart
     
 If needed
@@ -418,7 +420,6 @@ Lancer un import des articles
 
 
 # Linux usage
-
     sudo service docker start
 
 ## Launch image for diem's sites
