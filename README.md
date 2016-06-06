@@ -8,6 +8,7 @@
     - [Access container in CLI](#access-container-in-cli)
     - [Install diem site](#install-diem-site)
     - [Erase container](#erase-container)
+    - [Restart a docker container](#restart-a-docker-container)
     - [Apache2 controls](#apache2-controls)
     - [PhpMyAdmin access](#phpmyadmin-access)
     - [Xdebug usage](#xdebug-usage)
@@ -166,8 +167,10 @@ Sample for an sitediem2.loc site
     php /data/lamp/www/sitediem2/symfony less:compile-all
 
 ## Erase container
-
     docker rm -f lamp
+
+## Restart a docker container
+    docker restart lamp 
 
 ## Apache2 controls
 
