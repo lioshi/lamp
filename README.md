@@ -144,7 +144,7 @@ Alternative launching with added hosts for container. Needed for install a diem 
 
 Command line access of previous container
 
-    docker exec -it lamp bash
+    docker exec -it lamp env TERM=xterm bash
 
 ## Install diem site
 
@@ -231,7 +231,7 @@ Container launching (with ElasticSearch link, for testa application usage)
     --name=lamp \
     lioshi/lamp:latest
 
-    docker exec -it lamp bash
+    docker exec -it lamp env TERM=xterm bash
 
 NB: for information the link *elasticsearch* is used into config.yml file into testa : 
     
@@ -241,7 +241,7 @@ NB: for information the link *elasticsearch* is used into config.yml file into t
 
 ### Access lamp container
 
-    docker exec -it lamp bash
+    docker exec -it lamp env TERM=xterm bash
 
 ### the first time run, into testa dir
 
@@ -428,7 +428,7 @@ Lancer un import des articles
 ## Launch image for diem's sites
     docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem1.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=sitediem4.loc:127.0.0.1 --add-host=sitediem5.loc:127.0.0.1 --add-host=sitediem6.loc:127.0.0.1 --add-host=sitediem7.loc:127.0.0.1 --add-host=sitediem8.loc:127.0.0.1 --add-host=sitediem9.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
 
-    docker exec -it lamp bash
+    docker exec -it lamp env TERM=xterm bash
 
 ## Launch image for testa site
 
@@ -438,7 +438,7 @@ Lancer un import des articles
 
     docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --link elasticsearch --link memcached --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
 
-    docker exec -it lamp bash
+    docker exec -it lamp env TERM=xterm bash
 
 ## Some commands
     docker ps - Lists containers.
@@ -465,7 +465,7 @@ In workbench use this IP and admin user with password choose in docker run -e MY
 	sudo service docker start && \
 	docker rm -f lamp && \
 	docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /var/lib/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
-	docker exec -it lamp bash
+	docker exec -it lamp env TERM=xterm bash
 	
 
 
@@ -485,5 +485,5 @@ Then launch those commands
     sudo service docker start && \
     docker rm -f lamp && \
     docker run -d -p 80:80 -p 3306:3306 -v /data:/data -e MYSQL_PERSIST_BY_CRON="yes" -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
-    docker exec -it lamp bash
+    docker exec -it lamp env TERM=xterm bash
 
