@@ -83,7 +83,7 @@ RUN echo "alias node='nodejs'" >> ~/.bashrc
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 # Add vars
-RUN echo "TERM=xterm" >> ~/.bashrc
+RUN echo "export TERM=xterm" >> ~/.bashrc
 
 # PHPMyAdmin
 RUN (echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | debconf-set-selections)
