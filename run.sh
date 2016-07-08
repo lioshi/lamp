@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export TERM=xterm
+
 # Mysql
 VOLUME_HOME="/var/lib/mysql" 
 
