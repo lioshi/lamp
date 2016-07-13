@@ -57,6 +57,7 @@ RUN a2enmod rewrite
 # Environment variables to configure php
 ENV PHP_UPLOAD_MAX_FILESIZE 10M
 ENV PHP_POST_MAX_SIZE 10M
+ENV PHP_MEMORY_LIMIT 1024M
 
 # Add dirs for manage sites (mount from host in run needeed for persistence)
 RUN mkdir /data && mkdir /data/lamp && mkdir /data/lamp/conf && mkdir /data/lamp/www 
