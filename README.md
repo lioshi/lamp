@@ -22,6 +22,7 @@
     - [Testa install](#testa-install)
     - [Déployer le site](#déployer-le-site)
 - [Linux usage](#linux-usage)
+    - [Restart containers](#restart-containers)
     - [Launch image for diem's sites](#launch-image-for-diems-sites)
     - [Launch image for testa site](#launch-image-for-testa-site)
     - [Some commands](#some-commands)
@@ -428,6 +429,12 @@ Lancer le populate d'elasticSearch
 
 # Linux usage
     sudo service docker start
+
+
+## Restart containers
+    docker restart elasticsearch
+    docker restart memcached
+    docker restart lamp
 
 ## Launch image for diem's sites
     docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem1.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=sitediem4.loc:127.0.0.1 --add-host=sitediem5.loc:127.0.0.1 --add-host=sitediem6.loc:127.0.0.1 --add-host=sitediem7.loc:127.0.0.1 --add-host=sitediem8.loc:127.0.0.1 --add-host=sitediem9.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
