@@ -1,35 +1,30 @@
 <!-- MarkdownTOC -->
 
-- [Lamp](#lamp)
-- [Usage for site sample](#usage-for-site-sample)
-    - [Launch container](#launch-container)
-- [Usage for diem's site sample](#usage-for-diems-site-sample)
-    - [Launch container](#launch-container-1)
-    - [Access container in CLI](#access-container-in-cli)
-    - [Install diem site](#install-diem-site)
-    - [Erase container](#erase-container)
-    - [Restart a docker container](#restart-a-docker-container)
-    - [Apache2 controls](#apache2-controls)
-    - [PhpMyAdmin access](#phpmyadmin-access)
-    - [Xdebug usage](#xdebug-usage)
-- [Usage for install testa's site](#usage-for-install-testas-site)
-    - [Elasticsearch install](#elasticsearch-install)
-        - [launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations](#launch-previously-lioshielasticsearch-image-with-directory-in-host-to-persist-elasticsearch-indexations)
-        - [launch previously "lioshi/memcached" image](#launch-previously-lioshimemcached-image)
-        - [And then launch "lioshi/lamp" image with link](#and-then-launch-lioshilamp-image-with-link)
-        - [Access lamp container](#access-lamp-container)
-        - [the first time run, into testa dir](#the-first-time-run-into-testa-dir)
-    - [Testa install](#testa-install)
-    - [Déployer le site](#déployer-le-site)
-- [Linux usage](#linux-usage)
-    - [Restart containers](#restart-containers)
-    - [Launch image for diem's sites](#launch-image-for-diems-sites)
-    - [Launch image for testa site](#launch-image-for-testa-site)
-    - [Some commands](#some-commands)
-    - [Mysql Workbench usage](#mysql-workbench-usage)
-- [Mac OSX / Windows usage](#mac-osx--windows-usage)
-    - [Launch image for diem's sites with data volume \(TO BE TESTED\)](#launch-image-for-diems-sites-with-data-volume-to-be-tested)
-    - [Launch image for diem's sites \(WORKED, normaly\)](#launch-image-for-diems-sites-worked-normaly)
+- Lamp
+- Usage for site sample
+    - Launch container
+- Usage for diem's site sample
+    - Launch container
+    - Access container in CLI
+    - Install diem site
+    - Erase container
+    - Restart a docker container
+    - Apache2 controls
+    - PhpMyAdmin access
+    - Xdebug usage
+- Usage for install testa's site
+    - Elasticsearch install
+    - Testa install
+    - Déployer le site
+- Linux usage
+    - Restart containers
+    - Launch image for diem's sites
+    - Launch image for testa site
+    - Some commands
+    - Mysql Workbench usage
+- Mac OSX / Windows usage
+    - Launch image for diem's sites with data volume \(TO BE TESTED\)
+    - Launch image for diem's sites \(WORKED, normaly\)
 
 <!-- /MarkdownTOC -->
 
@@ -54,15 +49,15 @@ This docker image is used to launch container with all necessary applicatives in
 
 Create local datas. Create host directories.
 
-    mkdir /data 
-    mkdir /data/lamp 
-    mkdir /data/lamp/conf 
-    mkdir /data/lamp/www 
-    mkdir /data/mysql
+    mkdir lioshi/data 
+    mkdir /home/lioshi/data/lamp 
+    mkdir /home/lioshi/data/lamp/conf 
+    mkdir /home/lioshi/data/lamp/www 
+    mkdir /home/lioshi/data/mysql
     
-Directory */data/lamp/conf* contains apache conf files for each site
+Directory */home/lioshi/data/lamp/conf* contains apache conf files for each site
 
-Directory */data/lamp/www* contains site's source's file
+Directory */home/lioshi/data/lamp/www* contains site's source's file
 
 Add host locally (in your /etc/hosts file)
 
@@ -83,18 +78,18 @@ Ajouter user au group docker
 Container launching (with sample site create)
 
 	docker run --privileged=true -d -p 80:80 -p 3306:3306 \
-	-v /data:/data \
-	-v /data/mysql:/var/lib/mysql \
+	-v /home/lioshi/data:/data \
+	-v /home/lioshi/data/mysql:/var/lib/mysql \
 	-e MYSQL_PASS="admin" \
 	-e SITE_SAMPLE="create" \
 	--name=lamp \
 	lioshi/lamp:latest
 
-Container launching (with sample site erase if allready exists in /data dir of host machine)
+Container launching (with sample site erase if allready exists in /home/lioshi/data dir of host machine)
 
 	docker run --privileged=true -d -p 80:80 -p 3306:3306 \
-	-v /data:/data \
-	-v /data/mysql:/var/lib/mysql \
+	-v /home/lioshi/data:/data \
+	-v /home/lioshi/data/mysql:/var/lib/mysql \
 	-e MYSQL_PASS="admin" \
 	-e SITE_SAMPLE="erase" \
 	--name=lamp \
@@ -107,23 +102,23 @@ Container launching (with sample site erase if allready exists in /data dir of h
 
 Create local datas. Create host directories.
 
-    mkdir /data 
-    mkdir /data/lamp 
-    mkdir /data/lamp/conf 
-    mkdir /data/lamp/www 
-    mkdir /data/gitlibs/
-    mkdir /data/gitlibs/diem
-    cd /data/gitlibs/diem
+    mkdir /home/lioshi/data 
+    mkdir /home/lioshi/data/lamp 
+    mkdir /home/lioshi/data/lamp/conf 
+    mkdir /home/lioshi/data/lamp/www 
+    mkdir /home/lioshi/data/gitlibs/
+    mkdir /home/lioshi/data/gitlibs/diem
+    cd /home/lioshi/data/gitlibs/diem
     git clone https://github.com/SidPresse/diem.git
 
-Directory */data/lamp/conf* contains apache conf files for each site
-Directory */data/lamp/www* contains site's source's file
+Directory */home/lioshi/data/lamp/conf* contains apache conf files for each site
+Directory */home/lioshi/data/lamp/www* contains site's source's file
 
 Container launching
 	
     docker run --privileged=true -d -p 80:80 -p 3306:3306 \
-    -v /data:/data \
-    -v /data/mysql:/var/lib/mysql \
+    -v /home/lioshi/data:/data \
+    -v /home/lioshi/data/mysql:/var/lib/mysql \
     -e MYSQL_PASS="admin" \
     --name=lamp \
     --add-host=vm20.local:91.194.100.247 \
@@ -132,8 +127,8 @@ Container launching
 Alternative launching with added hosts for container. Needed for install a diem site
 
     docker run --privileged=true -d -p 80:80 -p 3306:3306 \
-    -v /data:/data \
-    -v /data/mysql:/var/lib/mysql \
+    -v /home/lioshi/data:/data \
+    -v /home/lioshi/data/mysql:/var/lib/mysql \
     -e MYSQL_PASS="admin" \
     --name=lamp \
     --add-host=sitediem.loc:127.0.0.1 \
@@ -150,12 +145,13 @@ Command line access of previous container
 
 ## Install diem site
 
+*You are now into docker container*
 Into CLI of container to install a new diem site:
 
 Create directory of site into /data/lamp/www/
 Into this dir launch your local diem, example:
 
-    php /data/lamp/lib/dien/install
+    php /data/lamp/lib/diem/install
 
 Etc...
 
@@ -214,7 +210,7 @@ Container launching (with ElasticSearch link, for testa application usage)
 ### launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations
 
     docker run --privileged=true -d -p 9200:9200 -p 9300:9300 \
-    -v /data/elasticsearch:/usr/share/elasticsearch/data \
+    -v /home/lioshi/data/elasticsearch:/usr/share/elasticsearch/data \
     --name=elasticsearch \
     lioshi/elasticsearch
 
@@ -225,8 +221,8 @@ Container launching (with ElasticSearch link, for testa application usage)
 ### And then launch "lioshi/lamp" image with link
 
     docker run --privileged=true -d -p 80:80 -p 3306:3306 \
-    -v /data:/data \
-    -v /data/mysql:/var/lib/mysql \
+    -v /home/lioshi/data:/data \
+    -v /home/lioshi/data/mysql:/var/lib/mysql \
     -e MYSQL_PASS="admin" \
     --link elasticsearch \
     --link memcached:memcached \
@@ -251,7 +247,7 @@ NB: for information the link *elasticsearch* is used into config.yml file into t
 
 ## Testa install
 
-Créer un fichier de conf apache dans le dossier /data/lamp/conf de l'hôte
+Créer un fichier de conf apache dans le dossier /home/lioshi/data/lamp/conf de l'hôte ou dans le dossier /data/lamp/conf du container bien sûr
 
     <VirtualHost *:80>
       ServerName    testa.loc
@@ -320,16 +316,16 @@ Et ajouter dans le /etc/hosts de l'hôte
 
 Cloner https://github.com/SidPresse/testa.git (ou un fork si vous n'avez pas accès) dans le dossier /data/lamp/www de l'hôte
 
-    cd /data/lamp/www
+    cd /home/lioshi/data/lamp/www
     git clone https://github.com/SidPresse/testa.git
 
 Créer le fichier composer.json à l'image de composer.json.dist
 
-    cp /data/lamp/www/testa/composer.json.dist /data/lamp/www/testa/composer.json
+    cp /home/lioshi/data/lamp/www/testa/composer.json.dist /home/lioshi/data/lamp/www/testa/composer.json
 
 Dupliquer le fichier parameters.yml sur l'hôte
 
-    cp /data/lamp/www/testa/app/config/parameters.yml.dist /data/lamp/www/testa/app/config/parameters.yml
+    cp /home/lioshi/data/lamp/www/testa/app/config/parameters.yml.dist /home/lioshi/data/lamp/www/testa/app/config/parameters.yml
 
 Lancer à la racine du projet un
 
@@ -338,14 +334,14 @@ Lancer à la racine du projet un
 NB: Composer va demander un token pour l'accès à certains repo privés, suivez les directives de composer.
 
 
-Si problème de config avec composer update, ou alors pour gagner du temps car le composer update demande beaucoup de temps pour "puller" tous les vendors nécessaires de packagist:
+Si *problème de config avec composer update*, ou alors pour gagner du temps car le composer update demande beaucoup de temps pour "puller" tous les vendors nécessaires de packagist:
 
     cat vendors.tar.gz-* > vendors.tar.gz
     tar -xzvf vendors.tar.gz
 
 Mettra une version qui fonctionne (en date du fichier) de tous les vendors nécessaires. Un `composer update` peut être lancé ensuite, il sera plus rapide.
 
-Pour remmettre dans le repo une archive de vendors (decoupee en fichier de 50mo: limite de github) à jour:
+Pour remmettre dans le repo git une archive de vendors (decoupee en fichier de 50mo: limite de github) à jour:
 
     split -b 50000k vendors.tar.gz
 
@@ -437,17 +433,17 @@ Lancer le populate d'elasticSearch
     docker restart lamp
 
 ## Launch image for diem's sites
-    docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem1.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=sitediem4.loc:127.0.0.1 --add-host=sitediem5.loc:127.0.0.1 --add-host=sitediem6.loc:127.0.0.1 --add-host=sitediem7.loc:127.0.0.1 --add-host=sitediem8.loc:127.0.0.1 --add-host=sitediem9.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
+    docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /home/lioshi/data:/data -v /home/lioshi/data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem1.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=sitediem4.loc:127.0.0.1 --add-host=sitediem5.loc:127.0.0.1 --add-host=sitediem6.loc:127.0.0.1 --add-host=sitediem7.loc:127.0.0.1 --add-host=sitediem8.loc:127.0.0.1 --add-host=sitediem9.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
 
     docker exec -it lamp env TERM=xterm bash
 
 ## Launch image for testa site
 
-    docker run --privileged=true -d -p 9200:9200 -p 9300:9300 -v /data/elasticsearch:/usr/share/elasticsearch/data --name=elasticsearch lioshi/elasticsearch
+    docker run --privileged=true -d -p 9200:9200 -p 9300:9300 -v /home/lioshi/data/elasticsearch:/usr/share/elasticsearch/data --name=elasticsearch lioshi/elasticsearch
 
     docker run --name memcached -p 11211:11211 -d lioshi/memcached
 
-    docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /data:/data -v /data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --link elasticsearch --link memcached --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
+    docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /home/lioshi/data:/data -v /home/lioshi/data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --link elasticsearch --link memcached --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
 
     docker exec -it lamp env TERM=xterm bash
 
