@@ -35,6 +35,9 @@ RUN echo "</Directory>" >> /etc/apache2/apache2.conf
 ENV TIMEZONE="Europe/Paris"
 RUN echo "date.timezone = '${TIMEZONE}'" >> /etc/php5/cli/php.ini && \
   echo "${TIMEZONE}" > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
+ENV LANG fr_FR.UTF-8  
+ENV LANGUAGE fr_FR:fr  
+ENV LC_ALL fr_FR.UTF-8  
 
 # Add image configuration and scripts
 ADD start-apache2.sh /start-apache2.sh
