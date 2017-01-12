@@ -15,7 +15,7 @@ MAINTAINER lioshi <lioshi@lioshi.com>
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get clean && apt-get update
 #RUN apt-get update --fix-missing
-RUN apt-get -y install supervisor apt-utils git apache2 libapache2-mod-php5 mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz parallel cron jpegoptim optipng
+RUN apt-get -y install supervisor apt-utils git apache2 libapache2-mod-php5 mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz parallel cron jpegoptim optipng locales
 
 #Install imagick
 RUN apt-get -y install imagemagick php5-imagick 
@@ -35,8 +35,12 @@ RUN echo "</Directory>" >> /etc/apache2/apache2.conf
 ENV TIMEZONE="Europe/Paris"
 RUN echo "date.timezone = '${TIMEZONE}'" >> /etc/php5/cli/php.ini && \
   echo "${TIMEZONE}" > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
-ENV LANG fr_FR.UTF-8  
-ENV LANGUAGE fr_FR:fr  
+
+RUN sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen && \
+    echo 'LANG="fr_FR.UTF-8"'>/etc/default/locale && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=fr_FR.UTF-8
+ENV LANG fr_FR.UTF-8 
 ENV LC_ALL fr_FR.UTF-8  
 
 # Add image configuration and scripts
