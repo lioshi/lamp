@@ -19,7 +19,7 @@ RUN apt-get -y install supervisor apt-utils git apache2 libapache2-mod-php5 mysq
 
 #Install imagick
 RUN apt-get -y install imagemagick php5-imagick 
-#RUN apachectl restart
+RUN apt-get -y install libapache2-mod-xsendfile 
 
 # Apache2 conf
 RUN echo "# Include vhost conf" >> /etc/apache2/apache2.conf 
