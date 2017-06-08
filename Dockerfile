@@ -18,7 +18,7 @@ RUN touch /var/cache/apt/archives/lock
 RUN chmod 640 /var/cache/apt/archives/lock
 RUN apt-get clean && apt-get update
 #RUN apt-get update --fix-missing
-RUN apt-get -y install supervisor apt-utils git apache2 lynx libapache2-mod-php5 mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz parallel cron jpegoptim optipng locales
+RUN apt-get -y install supervisor apt-utils git apache2 lynx libapache2-mod-php5 php5-dev mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz parallel cron jpegoptim optipng locales
 
 #Install v8js
 RUN apt-get -y install libv8-dev php-pear
@@ -117,7 +117,7 @@ ADD configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
 RUN apt-get -y install curl
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
-RUN apt-get -y install php5-xsl php5-dev php5-memcached 
+RUN apt-get -y install php5-xsl php5-memcached 
 
 
 ADD run.sh /run.sh

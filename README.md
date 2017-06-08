@@ -1,30 +1,35 @@
 <!-- MarkdownTOC -->
 
-- Lamp
-- Usage for site sample
-    - Launch container
-- Usage for diem's site sample
-    - Launch container
-    - Access container in CLI
-    - Install diem site
-    - Erase container
-    - Restart a docker container
-    - Apache2 controls
-    - PhpMyAdmin access
-    - Xdebug usage
-- Usage for install testa's site
-    - Elasticsearch install
-    - Testa install
-    - Déployer le site
-- Linux usage
-    - Restart containers
-    - Launch image for diem's sites
-    - Launch image for testa site
-    - Some commands
-    - Mysql Workbench usage
-- Mac OSX / Windows usage
-    - Launch image for diem's sites with data volume \(TO BE TESTED\)
-    - Launch image for diem's sites \(WORKED, normaly\)
+- [Lamp](#lamp)
+- [Usage for site sample](#usage-for-site-sample)
+    - [Launch container](#launch-container)
+- [Usage for diem's site sample](#usage-for-diem-s-site-sample)
+    - [Launch container](#launch-container)
+    - [Access container in CLI](#access-container-in-cli)
+    - [Install diem site](#install-diem-site)
+    - [Erase container](#erase-container)
+    - [Restart a docker container](#restart-a-docker-container)
+    - [Apache2 controls](#apache2-controls)
+    - [PhpMyAdmin access](#phpmyadmin-access)
+    - [Xdebug usage](#xdebug-usage)
+- [Usage for install testa's site](#usage-for-install-testa-s-site)
+    - [Elasticsearch install](#elasticsearch-install)
+        - [launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations](#launch-previously-lioshi-elasticsearch-image-with-directory-in-host-to-persist-elasticsearch-indexations)
+        - [launch previously "lioshi/memcached" image](#launch-previously-lioshi-memcached-image)
+        - [And then launch "lioshi/lamp" image with link](#and-then-launch-lioshi-lamp-image-with-link)
+        - [Access lamp container](#access-lamp-container)
+        - [the first time run, into testa dir](#the-first-time-run-into-testa-dir)
+    - [Testa install](#testa-install)
+    - [Déployer le site](#d-ployer-le-site)
+- [Linux usage](#linux-usage)
+    - [Restart containers](#restart-containers)
+    - [Launch image for diem's sites](#launch-image-for-diem-s-sites)
+    - [Launch image for testa site](#launch-image-for-testa-site)
+    - [Some commands](#some-commands)
+    - [Mysql Workbench usage](#mysql-workbench-usage)
+- [Mac OSX / Windows usage](#mac-osx-windows-usage)
+    - [Launch image for diem's sites with data volume (TO BE TESTED)](#launch-image-for-diem-s-sites-with-data-volume-to-be-tested)
+    - [Launch image for diem's sites (WORKED, normaly)](#launch-image-for-diem-s-sites-worked-normaly)
 
 <!-- /MarkdownTOC -->
 
@@ -443,7 +448,7 @@ Lancer le populate d'elasticSearch
 
     docker run --name memcached -p 11211:11211 -d lioshi/memcached
 
-    docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /home/lioshi/data:/data -v /home/lioshi/data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --link elasticsearch --link memcached --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
+    docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /home/lioshi/data:/data -v /home/lioshi/data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --link elasticsearch --link memcached --name=lamp --add-host=sitediem1.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=sitediem4.loc:127.0.0.1 --add-host=sitediem5.loc:127.0.0.1 --add-host=sitediem6.loc:127.0.0.1 --add-host=sitediem7.loc:127.0.0.1 --add-host=sitediem8.loc:127.0.0.1 --add-host=sitediem9.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
 
     docker exec -it lamp env TERM=xterm bash
 
