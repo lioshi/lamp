@@ -13,6 +13,9 @@ MAINTAINER lioshi <lioshi@lioshi.com>
 
 # Install packages
 ENV DEBIAN_FRONTEND noninteractive
+RUN mkdir -p /var/cache/apt/archives/partial
+RUN touch /var/cache/apt/archives/lock
+RUN chmod 640 /var/cache/apt/archives/lock
 RUN apt-get clean && apt-get update
 #RUN apt-get update --fix-missing
 RUN apt-get -y install supervisor apt-utils git apache2 lynx libapache2-mod-php5 mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz parallel cron jpegoptim optipng locales
