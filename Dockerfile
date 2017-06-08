@@ -23,7 +23,7 @@ RUN apt-get -y install supervisor apt-utils git apache2 lynx libapache2-mod-php5
 #Install v8js
 RUN apt-get -y install libv8-dev php-pear
 RUN echo "\n" | pecl install v8js-0.1.3
-RUN echo "extension=v8js.so" >> /etc/php5/cli/php.ini
+RUN echo "extension=/usr/lib/php5/20131226/v8js.so" >> /etc/php5/cli/php.ini
 
 #Install imagick
 RUN apt-get -y install imagemagick php5-imagick 
