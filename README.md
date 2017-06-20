@@ -37,11 +37,14 @@
 # Lamp
 Docker image for diem sites. Debian with LAMP, nodeJs, imagick... etc
 
+ATTENTION: PHP 7 version
+For PHP 5.6 use branch php5
+
 This docker image is used to launch container with all necessary applicatives instances for diem CMF
 
 - Debian
 - Apache
-- PHP
+- PHP 7
 - Mysql 
 - Node
 - ImageMagick
