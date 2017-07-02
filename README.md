@@ -205,6 +205,10 @@ Add extension to php.ini
 If needed
 
     echo 'xdebug.max_nesting_level = 1000' >> /etc/php5/apache2/php.ini 
+    echo 'xdebug.profiler_enable = 1' >> /etc/php5/apache2/php.ini
+    echo 'xdebug.profiler_output_name = xdebug.out.%t' >> /etc/php5/apache2/php.ini
+    echo 'xdebug.profiler_output_dir = /data' >> /etc/php5/apache2/php.ini
+    echo 'xdebug.profiler_enable_trigger = 1' >> /etc/php5/apache2/php.ini
     apachectl restart
 
 
