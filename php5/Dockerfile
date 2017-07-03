@@ -121,7 +121,7 @@ RUN mv composer.phar /usr/local/bin/composer
 RUN apt-get -y install php5-xsl php5-memcached 
 
 
-ADD run.sh /run.sh
+ADD ../run.sh /run.sh
 RUN chmod 755 /*.sh
 
 EXPOSE 80 3306
