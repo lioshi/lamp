@@ -1,3 +1,4 @@
+ 
 FROM debian:jessie
 MAINTAINER lioshi <lioshi@lioshi.com>
 
@@ -22,9 +23,9 @@ RUN apt-get clean && apt-get update
 RUN apt-get -y install supervisor apt-utils git apache2 lynx libapache2-mod-php5 php5-dev mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz parallel cron jpegoptim optipng locales
 
 #Install v8js
-RUN apt-get -y install libv8-dev php-pear
-RUN echo "\n" | pecl install v8js-0.1.3
-RUN echo "extension=v8js.so" >> /etc/php5/apache2/php.ini
+# RUN apt-get -y install libv8-dev php-pear
+# RUN echo "\n" | pecl install v8js-0.1.3
+# RUN echo "extension=v8js.so" >> /etc/php5/apache2/php.ini
 
 #Install imagick
 RUN apt-get -y install imagemagick php5-imagick 
@@ -69,4 +70,6 @@ ADD ../create_mysql_admin_user.sh /create_mysql_admin_user.sh
 RUN chmod 755 /*.sh
 
 # config Apache
-RUN a2enmod rewrite 
+RUN a2enmod rewrite
+
+
