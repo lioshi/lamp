@@ -23,9 +23,9 @@ RUN apt-get clean && apt-get update
 RUN apt-get -y install supervisor apt-utils git apache2 lynx libapache2-mod-php5 php5-dev mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz parallel cron jpegoptim optipng locales
 
 #Install v8js
-# RUN apt-get -y install libv8-dev php-pear
-# RUN echo "\n" | pecl install v8js-0.1.3
-# RUN echo "extension=v8js.so" >> /etc/php5/apache2/php.ini
+RUN apt-get -y install libv8-dev php-pear
+RUN echo "\n" | pecl install v8js-0.1.3
+RUN echo "extension=v8js.so" >> /etc/php5/apache2/php.ini
 
 #Install imagick
 RUN apt-get -y install imagemagick php5-imagick 
@@ -71,5 +71,62 @@ RUN chmod 755 /*.sh
 
 # config Apache
 RUN a2enmod rewrite
+
+# Environment variables to configure php
+ENV PHP_UPLOAD_MAX_FILESIZE 10M
+ENV PHP_POST_MAX_SIZE 10M
+ENV PHP_MEMORY_LIMIT 1024M
+
+# Add dirs for manage sites (mount from host in run needeed for persistence)
+RUN mkdir /data && mkdir /data/lamp && mkdir /data/lamp/conf && mkdir /data/lamp/www 
+
+# Add dirs for mysql persistent datas
+#RUN mkdir -p /var/lib/mysql
+#RUN chmod -R 777 /var/lib/mysql
+#RUN chown -R root:root /var/lib/mysql
+
+RUN chown -R mysql:mysql /var/lib/mysql
+
+# Add volumes for MySQL 
+VOLUME  [ "/etc/mysql", "/var/lib/mysql" ]
+
+# Add volumes for sites, confs and libs and mysql from host
+# /data/lamp/conf : apache conf file
+# /data/lamp/www  : site's file
+VOLUME  ["/data"]
+
+# Add alias
+RUN echo "alias node='nodejs'" >> ~/.bashrc
+
+# Add links
+RUN ln -s /usr/bin/nodejs /usr/bin/node
+
+# PHPMyAdmin
+RUN (echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | debconf-set-selections)
+RUN (echo 'phpmyadmin phpmyadmin/app-password password root' | debconf-set-selections)
+RUN (echo 'phpmyadmin phpmyadmin/app-password-confirm password root' | debconf-set-selections)
+RUN (echo 'phpmyadmin phpmyadmin/mysql/admin-pass password root' | debconf-set-selections)
+RUN (echo 'phpmyadmin phpmyadmin/mysql/app-pass password root' | debconf-set-selections)
+RUN (echo 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2' | debconf-set-selections)
+RUN apt-get install phpmyadmin -y
+ADD ../configs/phpmyadmin/config.inc.php /etc/phpmyadmin/conf.d/config.inc.php
+RUN chmod 755 /etc/phpmyadmin/conf.d/config.inc.php
+ADD ../configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
+#RUN chmod +x /phpmyadmin-setup.sh
+#RUN /phpmyadmin-setup.sh
+
+# Symfony 2 pre requisted
+RUN apt-get -y install curl
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
+RUN apt-get -y install php5-xsl php5-memcached 
+
+
+ADD ../run.sh /run.sh
+RUN chmod 755 /*.sh
+
+EXPOSE 80 3306
+
+CMD ["/run.sh"]
 
 
