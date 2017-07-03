@@ -2,7 +2,7 @@
 FROM debian:jessie
 MAINTAINER lioshi <lioshi@lioshi.com>
 
-# Tweaks to give MySQL write permissions to the app
+# Tweaks to give MySQL write permissions to the a pp
 #ENV BOOT2DOCKER_ID 1000
 #ENV BOOT2DOCKER_GID 50
 #
