@@ -45,7 +45,7 @@ Call version you prefer in run command:
 
 - lioshi/lamp:latest
 - lioshi/lamp:php5
-- lioshi/lamp:php5-v8js
+- lioshi/lamp:php5v8js
 
 This docker image is used to launch container with all necessary applicatives instances for diem CMF
 
