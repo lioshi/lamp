@@ -1,8 +1,7 @@
- 
 FROM debian:jessie
 MAINTAINER lioshi <lioshi@lioshi.com>
 
-# Tweaks to give MySQL write permissions to the a pp
+# Tweaks to give MySQL write permissions to the app
 #ENV BOOT2DOCKER_ID 1000
 #ENV BOOT2DOCKER_GID 50
 #
@@ -54,19 +53,19 @@ ENV LANG fr_FR.UTF-8
 ENV LC_ALL fr_FR.UTF-8  
 
 # Add image configuration and scripts
-ADD ../start-apache2.sh /start-apache2.sh
-ADD ../start-mysqld.sh /start-mysqld.sh
+ADD start-apache2.sh /start-apache2.sh
+ADD start-mysqld.sh /start-mysqld.sh
 #ADD run.sh /run.sh
 RUN chmod 755 /*.sh
-ADD ../my.cnf /etc/mysql/conf.d/my.cnf
-ADD ../supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
-ADD ../supervisord-mysqld.conf /etc/supervisor/conf.d/supervisord-mysqld.conf
+ADD my.cnf /etc/mysql/conf.d/my.cnf
+ADD supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
+ADD supervisord-mysqld.conf /etc/supervisor/conf.d/supervisord-mysqld.conf
 
 # Remove pre-installed database
 RUN rm -rf /var/lib/mysql/*
 
 # Add MySQL utils
-ADD ../create_mysql_admin_user.sh /create_mysql_admin_user.sh
+ADD create_mysql_admin_user.sh /create_mysql_admin_user.sh
 RUN chmod 755 /*.sh
 
 # config Apache
@@ -109,9 +108,9 @@ RUN (echo 'phpmyadmin phpmyadmin/mysql/admin-pass password root' | debconf-set-s
 RUN (echo 'phpmyadmin phpmyadmin/mysql/app-pass password root' | debconf-set-selections)
 RUN (echo 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2' | debconf-set-selections)
 RUN apt-get install phpmyadmin -y
-ADD ../configs/phpmyadmin/config.inc.php /etc/phpmyadmin/conf.d/config.inc.php
+ADD configs/phpmyadmin/config.inc.php /etc/phpmyadmin/conf.d/config.inc.php
 RUN chmod 755 /etc/phpmyadmin/conf.d/config.inc.php
-ADD ../configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
+ADD configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
 #RUN chmod +x /phpmyadmin-setup.sh
 #RUN /phpmyadmin-setup.sh
 
@@ -122,11 +121,10 @@ RUN mv composer.phar /usr/local/bin/composer
 RUN apt-get -y install php5-xsl php5-memcached 
 
 
-ADD ../run.sh /run.sh
+ADD run.sh /run.sh
 RUN chmod 755 /*.sh
 
 EXPOSE 80 3306
 
 CMD ["/run.sh"]
-
 

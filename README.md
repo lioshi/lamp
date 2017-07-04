@@ -1,6 +1,7 @@
 <!-- MarkdownTOC -->
 
 - [Lamp](#lamp)
+- [Versions](#versions)
 - [Usage for site sample](#usage-for-site-sample)
     - [Launch container](#launch-container)
 - [Usage for diem's site sample](#usage-for-diem-s-site-sample)
@@ -40,23 +41,22 @@ Docker image for diem sites. Debian with LAMP, nodeJs, imagick... etc
 
 # Versions
 ATTENTION: master/latest: PHP 7 version
-
+Call version you prefer in run command:
 
 - lioshi/lamp:latest
 - lioshi/lamp:php5
 - lioshi/lamp:php5-v8js
 
-
-
 This docker image is used to launch container with all necessary applicatives instances for diem CMF
 
 - Debian
 - Apache
-- PHP 5-7
+- PHP 5 or 7
 - Mysql 
 - Node
 - ImageMagick
 - NodeJs
+- V8JS or not
 - etc ...
 
 # Usage for site sample
