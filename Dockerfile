@@ -19,20 +19,18 @@ RUN chmod 640 /var/cache/apt/archives/lock
 RUN apt-get clean && apt-get update
 #RUN apt-get update --fix-missing
 
-
-
+# PHP5 lamp version
+# RUN apt-get -y install supervisor apt-utils git apache2 lynx libapache2-mod-php5 php5-dev mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz parallel cron jpegoptim optipng locales
 
 
 # PHP7 lamp version
-# TO DO
+RUN apt-get -y install apt-transport-https lsb-release ca-certificates
+RUN apt-get -y install wget
+RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+RUN apt-get update
+RUN apt -y install --no-install-recommends supervisor apt-utils git apache2 lynx mysql-server pwgen php7.1 libapache2-mod-php7.1 php7.1-mysql php7.1-curl php7.1-json php7.1-gd php7.1-mcrypt php7.1-msgpack php7.1-memcached php7.1-intl php7.1-sqlite3 php7.1-gmp php7.1-geoip php7.1-mbstring php7.1-redis php7.1-xml php7.1-zip php7.1-imap vim graphviz parallel cron jpegoptim optipng locales
 
-
-
-
-
-
-
-RUN apt-get -y install supervisor apt-utils git apache2 lynx libapache2-mod-php5 php5-dev mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz parallel cron jpegoptim optipng locales
 
 #Install v8js
 # RUN apt-get -y install libv8-dev php-pear
