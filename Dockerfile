@@ -35,10 +35,10 @@ RUN apt -y install --no-install-recommends supervisor apt-utils git apache2 lynx
 #Install v8js
 # RUN apt-get -y install libv8-dev php-pear
 # RUN echo "\n" | pecl install v8js-0.1.3
-# RUN echo "extension=v8js.so" >> /etc/php5/apache2/php.ini
+# RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
 
 #Install imagick
-RUN apt-get -y install imagemagick php5-imagick 
+RUN apt-get -y install imagemagick php7.1-imagick 
 RUN apt-get -y install libapache2-mod-xsendfile 
 
 # Apache2 conf
@@ -53,7 +53,7 @@ RUN echo "</Directory>" >> /etc/apache2/apache2.conf
 
 # Timezone settings
 ENV TIMEZONE="Europe/Paris"
-RUN echo "date.timezone = '${TIMEZONE}'" >> /etc/php5/apache2/php.ini && \
+RUN echo "date.timezone = '${TIMEZONE}'" >> /etc/php/7.1/apache2/php.ini && \
   echo "${TIMEZONE}" > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
 
 RUN sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen && \
@@ -129,7 +129,6 @@ ADD configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
 RUN apt-get -y install curl
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
-RUN apt-get -y install php5-xsl php5-memcached 
 
 
 ADD run.sh /run.sh
