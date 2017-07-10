@@ -33,9 +33,29 @@ RUN apt -y install --no-install-recommends supervisor apt-utils git apache2 lynx
 
 
 #Install v8js
-# RUN apt-get -y install libv8-dev php-pear
-# RUN echo "\n" | pecl install v8js-0.1.3
-# RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
+RUN apt-get install build-essential git python libglib2.0-dev
+RUN cd /tmp
+RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+RUN export PATH=`pwd`/depot_tools:"$PATH"
+RUN fetch v8
+RUN cd v8/
+RUN tools/dev/v8gen.py -vv x64.release -- is_component_build=true
+RUN ninja -C out.gn/x64.release/
+RUN mkdir -p /opt/v8/{lib,include}
+RUN cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin out.gn/x64.release/icudtl.dat /opt/v8/lib/
+RUN cp -R include/* /opt/v8/include/
+RUN cd /tmp
+RUN git clone https://github.com/phpv8/v8js.git
+RUN cd v8js/
+RUN apt-get update
+RUN apt-get install php7.1-dev
+RUN phpize
+RUN ./configure --with-v8js=/opt/v8
+RUN make
+RUN make test
+RUN make install
+RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
+
 
 #Install imagick
 RUN apt-get -y install imagemagick php7.1-imagick 
