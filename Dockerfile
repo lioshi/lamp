@@ -29,11 +29,11 @@ RUN apt-get -y install wget
 RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
 RUN apt-get update
-RUN apt -y install --no-install-recommends supervisor apt-utils git apache2 lynx mysql-server pwgen php7.1 libapache2-mod-php7.1 php7.1-mysql php7.1-curl php7.1-json php7.1-gd php7.1-mcrypt php7.1-msgpack php7.1-memcached php7.1-intl php7.1-sqlite3 php7.1-gmp php7.1-geoip php7.1-mbstring php7.1-redis php7.1-xml php7.1-zip php7.1-imap vim graphviz parallel cron jpegoptim optipng locales
+RUN apt-get -y install --no-install-recommends supervisor apt-utils git apache2 lynx mysql-server pwgen php7.1 libapache2-mod-php7.1 php7.1-mysql php7.1-curl php7.1-json php7.1-gd php7.1-mcrypt php7.1-msgpack php7.1-memcached php7.1-intl php7.1-sqlite3 php7.1-gmp php7.1-geoip php7.1-mbstring php7.1-redis php7.1-xml php7.1-zip php7.1-imap vim graphviz parallel cron jpegoptim optipng locales
 
 
 #Install v8js
-RUN apt-get install build-essential git python libglib2.0-dev
+RUN apt-get -y install build-essential python libglib2.0-dev
 RUN cd /tmp
 RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 RUN export PATH=`pwd`/depot_tools:"$PATH"
@@ -48,7 +48,7 @@ RUN cd /tmp
 RUN git clone https://github.com/phpv8/v8js.git
 RUN cd v8js/
 RUN apt-get update
-RUN apt-get install php7.1-dev
+RUN apt-get -y install php7.1-dev
 RUN phpize
 RUN ./configure --with-v8js=/opt/v8
 RUN make
