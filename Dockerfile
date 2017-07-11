@@ -39,16 +39,7 @@ RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 RUN export PATH=`pwd`/depot_tools:"$PATH"
  # RUN fetch v8  ... too long
 RUN gclient root
-RUN gclient config --spec 'solutions = [
-  {
-    "url": "https://chromium.googlesource.com/v8/v8.git",
-    "managed": False,
-    "name": "v8",
-    "deps_file": "DEPS",
-    "custom_deps": {},
-  },
-]
-'
+RUN gclient config --spec 'solutions = [{"url": "https://chromium.googlesource.com/v8/v8.git","managed": False,"name": "v8","deps_file": "DEPS","custom_deps": {},},]'
 RUN gclient sync --with_branch_heads --no-history
 RUN cd v8/
 RUN tools/dev/v8gen.py -vv x64.release -- is_component_build=true
