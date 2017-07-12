@@ -41,7 +41,7 @@ RUN cd v8/ && tools/dev/v8gen.py -vv x64.release -- is_component_build=true && n
 RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
 RUN apt-get update
 RUN apt-get -y install php7.1-dev
-RUN cd v8js/ && phpize && ./configure --with-v8js=/opt/v8 && make && make test && make install
+RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/opt/v8 && make && make test && make install
 RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
 
 
