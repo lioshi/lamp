@@ -36,7 +36,7 @@ RUN apt-get -y install --no-install-recommends supervisor apt-utils git apache2 
 RUN apt-get -y install build-essential python libglib2.0-dev
 RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 ENV PATH=${PATH}:/tmp/depot_tools
-RUN cd /tmp && fetch v8 --no-history 
+RUN cd /tmp && fetch --no-history v8
 RUN cd /tmp/v8/ && tools/dev/v8gen.py -vv x64.release -- is_component_build=true && ninja -C out.gn/x64.release/ && mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include && cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin out.gn/x64.release/icudtl.dat /opt/v8/lib/ && cp -R include/* /opt/v8/include/
 RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
 RUN apt-get update
