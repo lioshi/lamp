@@ -32,7 +32,7 @@ RUN apt-get update
 RUN apt-get -y install --no-install-recommends supervisor apt-utils git apache2 lynx mysql-server pwgen php7.1 libapache2-mod-php7.1 php7.1-mysql php7.1-curl php7.1-json php7.1-gd php7.1-mcrypt php7.1-msgpack php7.1-memcached php7.1-intl php7.1-sqlite3 php7.1-gmp php7.1-geoip php7.1-mbstring php7.1-redis php7.1-xml php7.1-zip php7.1-imap vim graphviz parallel cron jpegoptim optipng locales
 
 
-#Install  v8js
+#Install   v8js
 RUN apt-get -y install build-essential python libglib2.0-dev
 RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 ENV PATH=${PATH}:/tmp/depot_tools
