@@ -91,7 +91,7 @@ Ajouter user au group docker
     sudo usermod -aG docker $USER
     exit   
 
-Build image LAMP
+Build image LAMP, a root of repo LAMP directory
 
     docker build --tag="lamp:latest" .    
  
