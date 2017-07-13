@@ -45,8 +45,10 @@ RUN apt-get -y install --no-install-recommends supervisor apt-utils git apache2 
 # RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/opt/v8 && make && make test && make install
 # RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
 
-#Install v8js (PECL version)
-#RUN apt-get install php-pear php7.1-dev libv8-dev g++ cpp
+#Install v8js (PECL version: http://pecl.php.net/package/v8js)
+RUN apt-get -y install php-pear php7.1-dev libv8-dev g++ cpp
+RUN pecl install v8js-1.4.0
+RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
 
 
 #Install imagick
