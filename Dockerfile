@@ -32,51 +32,21 @@ RUN apt-get update
 RUN apt-get -y install --no-install-recommends supervisor apt-utils git apache2 lynx mysql-server pwgen php7.1 libapache2-mod-php7.1 php7.1-mysql php7.1-curl php7.1-json php7.1-gd php7.1-mcrypt php7.1-msgpack php7.1-memcached php7.1-intl php7.1-sqlite3 php7.1-gmp php7.1-geoip php7.1-mbstring php7.1-redis php7.1-xml php7.1-zip php7.1-imap vim graphviz parallel cron jpegoptim optipng locales
 
 #Install v8js (compile version)
-# RUN apt-get -y install build-essential python libglib2.0-dev
-# RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-# ENV PATH=${PATH}:/tmp/depot_tools
-# RUN cd /tmp && fetch --no-history v8
-# RUN cd /tmp/v8/ && tools/dev/v8gen.py -vv x64.release -- is_component_build=true && ninja -C out.gn/x64.release/ && mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include && cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin out.gn/x64.release/icudtl.dat /opt/v8/lib/ && cp -R include/* /opt/v8/include/
-# RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
-# RUN apt-get update
-# RUN apt-get -y install php7.1-dev
-# RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/opt/v8 && make && make test && make install
-# RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
+RUN apt-get -y install build-essential python libglib2.0-dev
+RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+ENV PATH=${PATH}:/tmp/depot_tools
+RUN cd /tmp && fetch --no-history v8
+RUN cd /tmp/v8/ && tools/dev/v8gen.py -vv x64.release -- is_component_build=true && ninja -C out.gn/x64.release/ && mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include && cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin out.gn/x64.release/icudtl.dat /opt/v8/lib/ && cp -R include/* /opt/v8/include/
+RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
+RUN apt-get update
+RUN apt-get -y install php7.1-dev
+RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/opt/v8 && make && make test && make install
+RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
 
 #Install v8js (PECL version: http://pecl.php.net/package/v8js)
 # RUN apt-get -y install php-pear php7.1-dev libv8-dev g++ cpp build-essential
 # RUN pecl install v8js-1.4.0
 # RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
-
-
-
-#Install v8js (compile version bis)
-RUN apt-get -y install python php7.1-dev chrpath && apt-get clean
-# depot tools
-RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git /usr/local/depot_tools
-ENV PATH $PATH:/usr/local/depot_tools
-# download v8
-RUN cd /usr/local/src && fetch v8
-# compile v8
-RUN cd /usr/local/src/v8 && make native library=shared snapshot=off -j4
-# install v8
-RUN mkdir -p /usr/local/lib
-RUN cp /usr/local/src/v8/out/native/lib.target/lib*.so /usr/local/lib
-RUN echo "create /usr/local/lib/libv8_libplatform.a\naddlib /usr/local/src/v8/out/native/obj.target/tools/gyp/libv8_libplatform.a\nsave\nend" | ar -M
-RUN cp -R /usr/local/src/v8/include /usr/local
-RUN chrpath -r '$ORIGIN' /usr/local/lib/libv8.so
-# get v8js, compile and install
-RUN git clone https://github.com/preillyme/v8js.git /usr/local/src/v8js
-RUN cd /usr/local/src/v8js && phpize && ./configure --with-v8js=/usr/local
-ENV NO_INTERACTION 1
-RUN cd /usr/local/src/v8js && make all test install
-# autoload v8js.so
-RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
-
-
-
-
-
 
 #Install imagick
 RUN apt-get -y install imagemagick php7.1-imagick 
@@ -153,18 +123,28 @@ RUN echo "alias node='nodejs'" >> ~/.bashrc
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 # PHPMyAdmin
-RUN (echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | debconf-set-selections)
-RUN (echo 'phpmyadmin phpmyadmin/app-password password root' | debconf-set-selections)
-RUN (echo 'phpmyadmin phpmyadmin/app-password-confirm password root' | debconf-set-selections)
-RUN (echo 'phpmyadmin phpmyadmin/mysql/admin-pass password root' | debconf-set-selections)
-RUN (echo 'phpmyadmin phpmyadmin/mysql/app-pass password root' | debconf-set-selections)
-RUN (echo 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2' | debconf-set-selections)
-RUN apt-get install phpmyadmin -y
-ADD configs/phpmyadmin/config.inc.php /etc/phpmyadmin/conf.d/config.inc.php
-RUN chmod 755 /etc/phpmyadmin/conf.d/config.inc.php
-ADD configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
+# RUN (echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | debconf-set-selections)
+# RUN (echo 'phpmyadmin phpmyadmin/app-password password root' | debconf-set-selections)
+# RUN (echo 'phpmyadmin phpmyadmin/app-password-confirm password root' | debconf-set-selections)
+# RUN (echo 'phpmyadmin phpmyadmin/mysql/admin-pass password root' | debconf-set-selections)
+# RUN (echo 'phpmyadmin phpmyadmin/mysql/app-pass password root' | debconf-set-selections)
+# RUN (echo 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2' | debconf-set-selections)
+# RUN apt-get install phpmyadmin -y
+# ADD configs/phpmyadmin/config.inc.php /etc/phpmyadmin/conf.d/config.inc.php
+# RUN chmod 755 /etc/phpmyadmin/conf.d/config.inc.php
+# ADD configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
 #RUN chmod +x /phpmyadmin-setup.sh
 #RUN /phpmyadmin-setup.sh
+
+RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.7.2/phpMyAdmin-4.7.2-all-languages.zip -P /var/www/html/
+RUN apt-get -q -y  install unzip
+RUN unzip /var/www/html/phpMyAdmin-4.7.2-all-languages.zip -d /var/www/html/
+RUN mv /var/www/html/phpMyAdmin-4.7.2-all-languages/ /var/www/html/phpmyadmin/
+RUN cp /var/www/html/phpmyadmin/config.sample.inc.php /var/www/html/phpmyadmin/config.inc.php
+
+ADD configs/phpmyadmin/config.inc.php /var/www/html/phpmyadmin/config.inc.php
+RUN chmod 755 /var/www/html/phpmyadmin/config.inc.php
+
 
 # Symfony 2 pre requisted
 RUN apt-get -y install curl
