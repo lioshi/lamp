@@ -19,8 +19,8 @@ RUN chmod 640 /var/cache/apt/archives/lock
 RUN apt-get clean && apt-get update
 #RUN apt-get update --fix-missing
 
-# PHP5 lamp version
-# RUN apt-get -y install supervisor apt-utils git apache2 lynx libapache2-mod-php5 php5-dev mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz parallel cron jpegoptim optipng locales
+# 7.1lamp version
+# RUN apt-get -y install supervisor apt-utils git apache2 lynx libapache2-mod-7.1php5-dev mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz parallel cron jpegoptim optipng locales
 
 
 # PHP7 lamp version
@@ -32,17 +32,21 @@ RUN apt-get update
 RUN apt-get -y install --no-install-recommends supervisor apt-utils git apache2 lynx mysql-server pwgen php7.1 libapache2-mod-php7.1 php7.1-mysql php7.1-curl php7.1-json php7.1-gd php7.1-mcrypt php7.1-msgpack php7.1-memcached php7.1-intl php7.1-sqlite3 php7.1-gmp php7.1-geoip php7.1-mbstring php7.1-redis php7.1-xml php7.1-zip php7.1-imap vim graphviz parallel cron jpegoptim optipng locales
 
 
-#Install   v8js
-RUN apt-get -y install build-essential python libglib2.0-dev
-RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-ENV PATH=${PATH}:/tmp/depot_tools
-RUN cd /tmp && fetch --no-history v8
-RUN cd /tmp/v8/ && tools/dev/v8gen.py -vv x64.release -- is_component_build=true && ninja -C out.gn/x64.release/ && mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include && cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin out.gn/x64.release/icudtl.dat /opt/v8/lib/ && cp -R include/* /opt/v8/include/
-RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
-RUN apt-get update
-RUN apt-get -y install php7.1-dev
-RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/opt/v8 && make && make test && make install
-RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
+
+#Install v8js (compile version)
+# RUN apt-get -y install build-essential python libglib2.0-dev
+# RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+# ENV PATH=${PATH}:/tmp/depot_tools
+# RUN cd /tmp && fetch --no-history v8
+# RUN cd /tmp/v8/ && tools/dev/v8gen.py -vv x64.release -- is_component_build=true && ninja -C out.gn/x64.release/ && mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include && cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin out.gn/x64.release/icudtl.dat /opt/v8/lib/ && cp -R include/* /opt/v8/include/
+# RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
+# RUN apt-get update
+# RUN apt-get -y install php7.1-dev
+# RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/opt/v8 && make && make test && make install
+# RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
+
+#Install v8js (PECL version)
+#RUN apt-get install php-pear php7.1-dev libv8-dev g++ cpp
 
 
 #Install imagick
