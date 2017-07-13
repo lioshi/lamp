@@ -91,9 +91,11 @@ Ajouter user au group docker
     sudo usermod -aG docker $USER
     exit   
 
-Build image LAMP, a root of repo LAMP directory
+Build image LAMP for version you need, a root of repo LAMP directory
 
     docker build --tag="lamp:latest" .    
+    docker build -f Dockerfile-php5 --tag="lamp:php5" . 
+    docker build -f Dockerfile-php5v8js --tag="lamp:php5v8js" .
  
 Container launching (with sample site create)
 
