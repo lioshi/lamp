@@ -137,14 +137,13 @@ RUN ln -s /usr/bin/nodejs /usr/bin/node
 #RUN /phpmyadmin-setup.sh
 
 RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.7.2/phpMyAdmin-4.7.2-all-languages.zip -P /var/www/html/
-RUN apt-get -q -y  install unzip
+RUN apt-get -q -y install unzip
 RUN unzip /var/www/html/phpMyAdmin-4.7.2-all-languages.zip -d /var/www/html/
 RUN mv /var/www/html/phpMyAdmin-4.7.2-all-languages/ /var/www/html/phpmyadmin/
 RUN cp /var/www/html/phpmyadmin/config.sample.inc.php /var/www/html/phpmyadmin/config.inc.php
 
 ADD configs/phpmyadmin/config.inc.php /var/www/html/phpmyadmin/config.inc.php
 RUN chmod 755 /var/www/html/phpmyadmin/config.inc.php
-
 
 # Symfony 2 pre requisted
 RUN apt-get -y install curl
