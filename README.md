@@ -4,7 +4,7 @@
 - [Versions](#versions)
 - [Usage for site sample](#usage-for-site-sample)
     - [Launch container](#launch-container)
-- [Usage for diem's site sample](#usage-for-diem-s-site-sample)
+- [Usage for diem's site sample](#usage-for-diems-site-sample)
     - [Launch container](#launch-container)
     - [Access container in CLI](#access-container-in-cli)
     - [Install diem site](#install-diem-site)
@@ -13,24 +13,24 @@
     - [Apache2 controls](#apache2-controls)
     - [PhpMyAdmin access](#phpmyadmin-access)
     - [Xdebug usage](#xdebug-usage)
-- [Usage for install testa's site](#usage-for-install-testa-s-site)
+- [Usage for install testa's site](#usage-for-install-testas-site)
     - [Elasticsearch install](#elasticsearch-install)
-        - [launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations](#launch-previously-lioshi-elasticsearch-image-with-directory-in-host-to-persist-elasticsearch-indexations)
-        - [launch previously "lioshi/memcached" image](#launch-previously-lioshi-memcached-image)
-        - [And then launch "lioshi/lamp" image with link](#and-then-launch-lioshi-lamp-image-with-link)
+        - [launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations](#launch-previously-lioshielasticsearch-image-with-directory-in-host-to-persist-elasticsearch-indexations)
+        - [launch previously "lioshi/memcached" image](#launch-previously-lioshimemcached-image)
+        - [And then launch "lioshi/lamp" image with link](#and-then-launch-lioshilamp-image-with-link)
         - [Access lamp container](#access-lamp-container)
         - [the first time run, into testa dir](#the-first-time-run-into-testa-dir)
     - [Testa install](#testa-install)
-    - [Déployer le site](#d-ployer-le-site)
+    - [Déployer le site](#déployer-le-site)
 - [Linux usage](#linux-usage)
     - [Restart containers](#restart-containers)
-    - [Launch image for diem's sites](#launch-image-for-diem-s-sites)
+    - [Launch image for diem's sites](#launch-image-for-diems-sites)
     - [Launch image for testa site](#launch-image-for-testa-site)
     - [Some commands](#some-commands)
     - [Mysql Workbench usage](#mysql-workbench-usage)
 - [Mac OSX / Windows usage](#mac-osx-windows-usage)
-    - [Launch image for diem's sites with data volume (TO BE TESTED)](#launch-image-for-diem-s-sites-with-data-volume-to-be-tested)
-    - [Launch image for diem's sites (WORKED, normaly)](#launch-image-for-diem-s-sites-worked-normaly)
+    - [Launch image for diem's sites with data volume (TO BE TESTED)](#launch-image-for-diems-sites-with-data-volume-to-be-tested)
+    - [Launch image for diem's sites (WORKED, normaly)](#launch-image-for-diems-sites-worked-normaly)
 
 <!-- /MarkdownTOC -->
 
@@ -90,6 +90,11 @@ Ajouter user au group docker
     groupadd docker
     sudo usermod -aG docker $USER
     exit   
+
+clone lioshi/lamp repo
+
+    cd /home/lioshi/gitlibs/
+    git clone https://github.com/lioshi/lamp.git
 
 Build image LAMP for version you need, a root of repo LAMP directory
 

@@ -1,16 +1,6 @@
 FROM debian:jessie
 MAINTAINER lioshi <lioshi@lioshi.com>
 
-# Tweaks to give MySQL write permissions to the app
-#ENV BOOT2DOCKER_ID 1000
-#ENV BOOT2DOCKER_GID 50
-#
-#RUN useradd -r mysql -u ${BOOT2DOCKER_ID} && \
-#    usermod -G staff mysql
-#
-#RUN groupmod -g $(($BOOT2DOCKER_GID + 10000)) $(getent group $BOOT2DOCKER_GID | cut -d: -f1)
-#RUN groupmod -g ${BOOT2DOCKER_GID} staff
-
 # Install packages
 ENV DEBIAN_FRONTEND noninteractive
 RUN mkdir -p /var/cache/apt/archives/partial
@@ -18,10 +8,6 @@ RUN touch /var/cache/apt/archives/lock
 RUN chmod 640 /var/cache/apt/archives/lock
 RUN apt-get clean && apt-get update
 #RUN apt-get update --fix-missing
-
-# 7.1lamp version
-# RUN apt-get -y install supervisor apt-utils git apache2 lynx libapache2-mod-7.1php5-dev mysql-server php5-mysql php5-curl php5-gd pwgen php5-mcrypt php5-intl php5-imap vim graphviz parallel cron jpegoptim optipng locales
-
 
 # PHP7 lamp version
 RUN apt-get -y install apt-transport-https lsb-release ca-certificates
@@ -42,11 +28,6 @@ RUN apt-get update
 RUN apt-get -y install php7.1-dev
 RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/opt/v8 && make && make test && make install
 RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
-
-#Install v8js (PECL version: http://pecl.php.net/package/v8js)
-# RUN apt-get -y install php-pear php7.1-dev libv8-dev g++ cpp build-essential
-# RUN pecl install v8js-1.4.0
-# RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
 
 #Install imagick
 RUN apt-get -y install imagemagick php7.1-imagick 
@@ -101,11 +82,6 @@ ENV PHP_MEMORY_LIMIT 1024M
 # Add dirs for manage sites (mount from host in run needeed for persistence)
 RUN mkdir /data && mkdir /data/lamp && mkdir /data/lamp/conf && mkdir /data/lamp/www 
 
-# Add dirs for mysql persistent datas
-#RUN mkdir -p /var/lib/mysql
-#RUN chmod -R 777 /var/lib/mysql
-#RUN chown -R root:root /var/lib/mysql
-
 RUN chown -R mysql:mysql /var/lib/mysql
 
 # Add volumes for MySQL 
@@ -122,26 +98,12 @@ RUN echo "alias node='nodejs'" >> ~/.bashrc
 # Add links
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
-# PHPMyAdmin
-# RUN (echo 'phpmyadmin phpmyadmin/dbconfig-install boolean true' | debconf-set-selections)
-# RUN (echo 'phpmyadmin phpmyadmin/app-password password root' | debconf-set-selections)
-# RUN (echo 'phpmyadmin phpmyadmin/app-password-confirm password root' | debconf-set-selections)
-# RUN (echo 'phpmyadmin phpmyadmin/mysql/admin-pass password root' | debconf-set-selections)
-# RUN (echo 'phpmyadmin phpmyadmin/mysql/app-pass password root' | debconf-set-selections)
-# RUN (echo 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2' | debconf-set-selections)
-# RUN apt-get install phpmyadmin -y
-# ADD configs/phpmyadmin/config.inc.php /etc/phpmyadmin/conf.d/config.inc.php
-# RUN chmod 755 /etc/phpmyadmin/conf.d/config.inc.php
-# ADD configs/phpmyadmin/phpmyadmin-setup.sh /phpmyadmin-setup.sh
-#RUN chmod +x /phpmyadmin-setup.sh
-#RUN /phpmyadmin-setup.sh
-
+# Phpmyadmin
 RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.7.2/phpMyAdmin-4.7.2-all-languages.zip -P /var/www/html/
 RUN apt-get -q -y install unzip
 RUN unzip /var/www/html/phpMyAdmin-4.7.2-all-languages.zip -d /var/www/html/
 RUN mv /var/www/html/phpMyAdmin-4.7.2-all-languages/ /var/www/html/phpmyadmin/
 RUN cp /var/www/html/phpmyadmin/config.sample.inc.php /var/www/html/phpmyadmin/config.inc.php
-
 ADD configs/phpmyadmin/config.inc.php /var/www/html/phpmyadmin/config.inc.php
 RUN chmod 755 /var/www/html/phpmyadmin/config.inc.php
 
