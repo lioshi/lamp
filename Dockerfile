@@ -15,19 +15,52 @@ RUN apt-get -y install wget
 RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
 RUN apt-get update
-RUN apt-get -y install --no-install-recommends supervisor apt-utils git apache2 lynx mysql-server pwgen php7.1 libapache2-mod-php7.1 php7.1-mysql php7.1-curl php7.1-json php7.1-gd php7.1-mcrypt php7.1-msgpack php7.1-memcached php7.1-intl php7.1-sqlite3 php7.1-gmp php7.1-geoip php7.1-mbstring php7.1-redis php7.1-xml php7.1-zip php7.1-imap vim graphviz parallel cron jpegoptim optipng locales
+RUN apt-get -y install --no-install-recommends --fix-missing supervisor apt-utils git apache2 lynx mysql-server pwgen php7.1 libapache2-mod-php7.1 php7.1-mysql php7.1-curl php7.1-json php7.1-gd php7.1-mcrypt php7.1-msgpack php7.1-memcached php7.1-intl php7.1-sqlite3 php7.1-gmp php7.1-geoip php7.1-mbstring php7.1-redis php7.1-xml php7.1-zip php7.1-imap vim graphviz parallel cron jpegoptim optipng locales 
+
+
 
 #Install v8js (compile version)
-RUN apt-get -y install build-essential python libglib2.0-dev
+RUN apt-get -y install build-essential python libglib2.0-dev lbzip2
 RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 ENV PATH=${PATH}:/tmp/depot_tools
-RUN cd /tmp && fetch --no-history v8
+# RUN cd /tmp && fetch --no-history v8
+
+RUN cd /tmp && gclient root
+RUN cd /tmp && gclient config --spec 'solutions = [ \
+  {\
+    "url": "https://chromium.googlesource.com/v8/v8.git",\
+    "managed": False,\
+    "name": "v8",\
+    "deps_file": "DEPS",\
+    "custom_deps": {},\
+  },\
+]\
+'
+RUN cd /tmp && gclient sync --no-history --with_branch_heads
+RUN cd /tmp && git submodule foreach 'git config -f $toplevel/.git/config submodule.$name.ignore all'
+RUN cd /tmp && git config --add remote.origin.fetch '+refs/tags/*:refs/tags/*'
+RUN cd /tmp && git config diff.ignoreSubmodules all
+
+
+
+
 RUN cd /tmp/v8/ && tools/dev/v8gen.py -vv x64.release -- is_component_build=true && ninja -C out.gn/x64.release/ && mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include && cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin out.gn/x64.release/icudtl.dat /opt/v8/lib/ && cp -R include/* /opt/v8/include/
 RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
 RUN apt-get update
 RUN apt-get -y install php7.1-dev
 RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/opt/v8 && make && make test && make install
 RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
+
+#Install v8js (PECL version)
+# RUN apt-get -y install php-pear libv8-dev libv8-3.14-dbg php7.1-dev
+# RUN pecl install v8js
+# RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini 
+
+
+
+
+
+
 
 #Install imagick
 RUN apt-get -y install imagemagick php7.1-imagick 
