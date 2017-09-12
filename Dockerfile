@@ -1,64 +1,117 @@
-FROM debian:jessie
+# FROM debian:jessie
+FROM ubuntu:trusty
 MAINTAINER lioshi <lioshi@lioshi.com>
 
-# Install packages
-ENV DEBIAN_FRONTEND noninteractive
-RUN mkdir -p /var/cache/apt/archives/partial
-RUN touch /var/cache/apt/archives/lock
-RUN chmod 640 /var/cache/apt/archives/lock
-RUN apt-get clean && apt-get update
-#RUN apt-get update --fix-missing
+# Let the container know that there is no tty
+ENV DEBIAN_FRONTEN noninteractive
+
+RUN dpkg-divert --local --rename --add /sbin/initctl && \
+	ln -sf /bin/true /sbin/initctl && \
+	mkdir /var/run/sshd && \
+	mkdir /run/php && \
+	
+	apt-get update && \
+	apt-get install -y --no-install-recommends apt-utils \ 
+		software-properties-common \
+		python-software-properties \
+		language-pack-en-base && \
+
+	LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php && \
+
+	apt-get update && apt-get upgrade -y && \
+
+	apt-get install -y python-setuptools \ 
+		curl \
+		git \
+		nano \
+		sudo \
+		unzip \
+		openssh-server \
+		openssl \
+		supervisor \
+		nginx \
+		memcached \
+		ssmtp \
+		cron && \
+
+	# Install PHP
+	apt-get install -y php7.1-fpm \
+		php7.1-mysql \
+	    php7.1-curl \
+	    php7.1-gd \
+	    php7.1-intl \
+	    php7.1-mcrypt \
+	    php-memcache \
+	    php7.1-sqlite \
+	    php7.1-tidy \
+	    php7.1-xmlrpc \
+	    php7.1-pgsql \
+	    php7.1-ldap \
+	    freetds-common \
+	    php7.1-pgsql \
+	    php7.1-sqlite3 \
+	    php7.1-json \
+	    php7.1-xml \
+	    php7.1-mbstring \
+	    php7.1-soap \
+	    php7.1-zip \
+	    php7.1-cli \
+	    php7.1-sybase \
+	    php7.1-odbc
+
 
 # PHP7 lamp version
-RUN apt-get -y install apt-transport-https lsb-release ca-certificates
-RUN apt-get -y install wget
-RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+# RUN apt-get -y install apt-transport-https lsb-release ca-certificates
+# RUN apt-get -y install wget
+# RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+# RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
 RUN apt-get update
 RUN apt-get -y install --no-install-recommends --fix-missing supervisor apt-utils git apache2 lynx mysql-server pwgen php7.1 libapache2-mod-php7.1 php7.1-mysql php7.1-curl php7.1-json php7.1-gd php7.1-mcrypt php7.1-msgpack php7.1-memcached php7.1-intl php7.1-sqlite3 php7.1-gmp php7.1-geoip php7.1-mbstring php7.1-redis php7.1-xml php7.1-zip php7.1-imap vim graphviz parallel cron jpegoptim optipng locales 
 
 
-
-#Install v8js (compile version)
-RUN apt-get -y install build-essential python libglib2.0-dev lbzip2
-RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-ENV PATH=${PATH}:/tmp/depot_tools
-# RUN cd /tmp && fetch --no-history v8
-
-RUN cd /tmp && gclient root
-RUN cd /tmp && gclient config --spec 'solutions = [ \
-  {\
-    "url": "https://chromium.googlesource.com/v8/v8.git",\
-    "managed": False,\
-    "name": "v8",\
-    "deps_file": "DEPS",\
-    "custom_deps": {},\
-  },\
-]\
-'
-RUN cd /tmp && gclient sync --no-history --with_branch_heads
-RUN cd /tmp && git submodule foreach 'git config -f $toplevel/.git/config submodule.$name.ignore all'
-RUN cd /tmp && git config --add remote.origin.fetch '+refs/tags/*:refs/tags/*'
-RUN cd /tmp && git config diff.ignoreSubmodules all
+# Install v8js / V8
+RUN apt-get install -y software-properties-common
+RUN add-apt-repository -y ppa:pinepain/libv8-5.4
+RUN apt-get update -y
+RUN apt-get install -y libv8-5.4-dev
+RUN apt-get -y install php-pear php7.1-dev
+RUN pecl install v8js
+RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini 
 
 
+# #Install v8js (compile version)
+# RUN apt-get -y install build-essential python libglib2.0-dev lbzip2 && apt-get clean
+# RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+# ENV PATH=${PATH}:/tmp/depot_tools
+# RUN cd /tmp && fetch v8
+# # # RUN cd /tmp && gclient root
+# # # RUN cd /tmp && gclient config --spec 'solutions = [ \
+# # #   {\
+# # #     "url": "https://chromium.googlesource.com/v8/v8.git",\
+# # #     "managed": False,\
+# # #     "name": "v8",\
+# # #     "deps_file": "DEPS",\
+# # #     "custom_deps": {},\
+# # #   },\
+# # # ]\
+# # # '
+# # # RUN cd /tmp && gclient sync --no-history --with_branch_heads
+# # # RUN cd /tmp && git submodule foreach 'git config -f $toplevel/.git/config submodule.$name.ignore all'
+# # # RUN cd /tmp && git config --add remote.origin.fetch '+refs/tags/*:refs/tags/*'
+# # # RUN cd /tmp && git config diff.ignoreSubmodules all
+# RUN cd /tmp/v8/ && tools/dev/v8gen.py -vv x64.release -- is_component_build=true && ninja -C out.gn/x64.release/ && mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include && cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin out.gn/x64.release/icudtl.dat /opt/v8/lib/ && cp -R include/* /opt/v8/include/
+# RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
+# RUN apt-get update
+# RUN apt-get -y install php7.1-dev
+# RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/usr/lib && make && make test && make install
+# RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
 
 
-RUN cd /tmp/v8/ && tools/dev/v8gen.py -vv x64.release -- is_component_build=true && ninja -C out.gn/x64.release/ && mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include && cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin out.gn/x64.release/icudtl.dat /opt/v8/lib/ && cp -R include/* /opt/v8/include/
-RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
-RUN apt-get update
-RUN apt-get -y install php7.1-dev
-RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/opt/v8 && make && make test && make install
-RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
 
-#Install v8js (PECL version)
+# # Install v8js (PECL version)
 # RUN apt-get -y install php-pear libv8-dev libv8-3.14-dbg php7.1-dev
 # RUN pecl install v8js
 # RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini 
-
-
-
-
 
 
 
@@ -77,16 +130,10 @@ RUN echo "    Require all granted" >> /etc/apache2/apache2.conf
 RUN echo "</Directory>" >> /etc/apache2/apache2.conf 
 
 # Timezone settings
-ENV TIMEZONE="Europe/Paris"
-RUN echo "date.timezone = '${TIMEZONE}'" >> /etc/php/7.1/apache2/php.ini && \
-  echo "${TIMEZONE}" > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
-
-RUN sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen && \
-    echo 'LANG="fr_FR.UTF-8"'>/etc/default/locale && \
-    dpkg-reconfigure --frontend=noninteractive locales && \
-    update-locale LANG=fr_FR.UTF-8
-ENV LANG fr_FR.UTF-8 
-ENV LC_ALL fr_FR.UTF-8  
+RUN locale-gen fr_FR.UTF-8
+ENV LANG fr_FR.UTF-8
+ENV LANGUAGE fr_FR:en
+ENV LC_ALL fr_FR.UTF-8
 
 # Add image configuration and scripts
 ADD start-apache2.sh /start-apache2.sh
