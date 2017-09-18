@@ -80,7 +80,7 @@ RUN dpkg-divert --local --rename --add /sbin/initctl && \
         optipng \
         locales 
 
-# Install v8js / V8
+# Install v8js / V8 (PECL with ppa version)
 RUN apt-get install -y software-properties-common
 RUN add-apt-repository -y ppa:pinepain/libv8-5.4
 RUN apt-get update -y
@@ -88,6 +88,18 @@ RUN apt-get install -y libv8-5.4
 RUN apt-get -y install php-pear php7.1-dev
 RUN pecl install v8js
 RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini 
+
+# Install v8js / V8 (compile version)
+# RUN apt-get -y install build-essential python libglib2.0-dev
+# RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+# ENV PATH=${PATH}:/tmp/depot_tools
+# RUN cd /tmp && fetch --no-history v8
+# RUN cd /tmp/v8/ && tools/dev/v8gen.py -vv x64.release -- is_component_build=true && ninja -C out.gn/x64.release/ && mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include && cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin out.gn/x64.release/icudtl.dat /opt/v8/lib/ && cp -R include/* /opt/v8/include/
+# RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
+# RUN apt-get update
+# RUN apt-get -y install php7.1-dev
+# RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/opt/v8 && make && make test && make install
+# RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
 
 #Install imagick
 RUN apt-get -y install imagemagick php7.1-imagick 
