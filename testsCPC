@@ -1,0 +1,56 @@
+Master         Develop          develop PHP7
+
+1.006s/page   1.344s/page      : 0.967s/page                  ag-im000547.nanna 
+0.578s/page    0.726s/page     : 0.444s/page                  ag-im000278.nanna 
+0.926s/page    1.231s/page     : 0.914s/page                  ag-im000567.nanna 
+1.797s/page    2.698s/page     : 1.322s/page                  ag-lesechossolutions-publishing.nanna 
+1.156s/page    1.52s/page      : 1.019s/page                  ag-im000067.nanna 
+0.582s/page    0.708s/page     : 0.508s/page                  ag-im000123.nanna 
+0.685s/page    0.977s/page     : 0.668s/page                  ag-im021767.nanna 
+0.864s/page    1.165s/page     : 0.77s/page                  ag-im004433.nanna 
+0.909s/page    0.922s/page     : 0.628s/page                  ag-im017042.nanna 
+0.727s/page    0.751s/page     : 0.466s/page                  ag-im034536.nanna 
+0.791s/page    0.959s/page     : 0.552s/page                  ag-im016847.nanna 
+0.768s/page    0.942s/page     : 0.596s/page                  ag-im012242.nanna 
+1.27s/page    1.784s/page      : 0.803s/page                  ag-im000644.nanna 
+0.545s/page    0.695s/page     : 0.494s/page                  ag-im025179.nanna 
+1.02s/page    1.211s/page      : 0.639s/page                  ag-im000957.nanna 
+0.502s/page    0.619s/page     : 0.393s/page                  ag-im021050.nanna 
+1.007s/page    1.304s/page     : 0.698s/page                  ag-im000139.nanna 
+0.964s/page    1.301s/page     : 0.733s/page                  ag-im016866.nanna 
+0.927s/page    1.021s/page     : 0.546s/page                  ag-im000198.nanna 
+1.679s/page    2.368s/page     : 0.833s/page                  ag-im003779.nanna 
+1.012s/page    1.23s/page      : 0.735s/page                  ag-im000113.nanna 
+1.228s/page    1.468s/page     : 0.934s/page                  ag-im000100.nanna 
+0.712s/page    0.74s/page      : 0.478s/page                  ag-im000253.nanna 
+1.077s/page    1.189s/page     : 0.744s/page                  ag-im000069.nanna 
+1.167s/page    1.297s/page     : 0.784s/page                  ag-im001186.nanna 
+2.362s/page    2.213s/page     : 1.766s/page                  ag-im000110.nanna 
+1.992s/page    2.536s/page     : 1.633s/page                  ag-im-audecia-client.nanna 
+0.142s/page    0.144s/page     : 0.13s/page                  ag-sgintranet.nanna 
+0.914s/page    0.947s/page     : 0.562s/page                  ag-im030540.nanna 
+0.894s/page    1.073s/page     : 0.653s/page                  ag-im028603.nanna 
+0.27s/page    0.272s/page      : 0.202s/page                  ag-lesechossolutions-web.nanna 
+1.032s/page    1.078s/page     : 0.597s/page                  ag-im024869.nanna 
+2.726s/page    3.795s/page     : 1.429s/page                  ag-lesechossolutions-tropheesmarcom.nanna 
+0.944s/page    0.984s/page     : 0.589s/page                  ag-im017641.nanna 
+2.765s/page    3.694s/page     : 1.236s/page                  ag-im037475.nanna 
+0.703s/page    0.697s/page     : 0.421s/page                  ag-im023456.nanna 
+1.037s/page    0.95s/page      : 0.57s/page                  ag-im000285-aga.nanna 
+0.92s/page    0.964s/page      : 0.607s/page                  ag-im017642.nanna 
+0.799s/page    0.822s/page     : 0.534s/page                  ag-im002292.nanna 
+0.953s/page    0.987s/page     : 0.594s/page                  ag-im027303.nanna 
+1.705s/page    2.313s/page     : 0.875s/page                  ag-im005409.nanna 
+0.63s/page    0.605s/page      : 0.35s/page                  ag-demo-ec-epsilon.nanna 
+1.377s/page    1.357s/page     : 0.851s/page                  ag-im000119.nanna 
+0.463s/page    0.487s/page     : 0.337s/page                  ag-im000184.nanna
+
+
+find /data/lamp/www/agaudin/ -maxdepth 2 -type f -wholename "*symfony" -exec script -qa -c "php {} ccc --all=true" /data/cpc/cpclogs \;
+find /data/lamp/www/agaudin/ -maxdepth 2 -type f -wholename "*symfony" -exec script -qa -c "php {} cpc --autolaunch=true --diffcontent=/data/cpc" /data/cpc/cpclogs \;
+
+ 
+
+
+
+ 

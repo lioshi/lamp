@@ -6,8 +6,8 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN mkdir -p /var/cache/apt/archives/partial
 RUN touch /var/cache/apt/archives/lock
 RUN chmod 640 /var/cache/apt/archives/lock
-RUN apt-get clean && apt-get update
-#RUN apt-get update --fix-missing
+RUN apt-get clean 
+RUN apt-get update --fix-missing
 
 # PHP7 lamp version
 RUN apt-get -y install apt-transport-https lsb-release ca-certificates

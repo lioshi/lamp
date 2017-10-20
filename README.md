@@ -21,7 +21,7 @@
         - [Access lamp container](#access-lamp-container)
         - [the first time run, into testa dir](#the-first-time-run-into-testa-dir)
     - [Testa install](#testa-install)
-    - [Déployer le site](#déployer-le-site)
+    - [Déployer le site](#d%C3%A9ployer-le-site)
 - [Linux usage](#linux-usage)
     - [Restart containers](#restart-containers)
     - [Launch image for diem's sites](#launch-image-for-diems-sites)
@@ -134,9 +134,9 @@ Create local datas. Create host directories.
     mkdir /home/lioshi/data/lamp/conf 
     mkdir /home/lioshi/data/lamp/www 
     mkdir /home/lioshi/data/gitlibs/
-    mkdir /home/lioshi/data/gitlibs/diem
-    cd /home/lioshi/data/gitlibs/diem
     git clone https://github.com/SidPresse/diem.git
+    cd /home/lioshi/data/gitlibs/diem
+    git submodule update --init --recursive
 
 Directory */home/lioshi/data/lamp/conf* contains apache conf files for each site
 Directory */home/lioshi/data/lamp/www* contains site's source's file
