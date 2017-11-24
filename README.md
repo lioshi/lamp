@@ -278,7 +278,7 @@ NB: for information the link *elasticsearch* is used into config.yml file into t
 
 ## Testa install
 
-Créer un fichier de conf apache dans le dossier /home/lioshi/data/lamp/conf de l'hôte ou dans le dossier /data/lamp/conf du container bien sûr
+Créer un fichier de testa.conf apache dans le dossier /home/lioshi/data/lamp/conf de l'hôte ou dans le dossier /data/lamp/conf du container bien sûr
 
     <VirtualHost *:80>
       ServerName    testa.loc
@@ -362,8 +362,13 @@ Lancer à la racine du projet un
 
     composer update
 
-NB: Composer va demander un token pour l'accès à certains repo privés, suivez les directives de composer.
-
+NB: Composer va demander un token pour l'accès à certains repo privés, suivez les directives de composer:
+Générez un jeton pour vous sur github:  https://github.com/settings/tokens
+Nous recevons notre jeton, par exemple: 1234567890abcdef1234567890abcdef123456789
+Exécutez la commande dans la console: 
+    
+    composer config -g github-oauth.github.com  1234567890abcdef1234567890abcdef123456789
+    
 
 Si *problème de config avec composer update*, ou alors pour gagner du temps car le composer update demande beaucoup de temps pour "puller" tous les vendors nécessaires de packagist:
 
