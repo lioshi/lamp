@@ -23,10 +23,14 @@ RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_
 ENV PATH=${PATH}:/tmp/depot_tools
 RUN cd /tmp && fetch --no-history v8
 RUN cd /tmp/v8/ && tools/dev/v8gen.py -vv x64.release -- is_component_build=true && ninja -C out.gn/x64.release/ && mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include && cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin out.gn/x64.release/icudtl.dat /opt/v8/lib/ && cp -R include/* /opt/v8/include/
+
+RUN apt-get install patchelf
+RUN for A in /opt/v8/lib/*.so; do patchelf --set-rpath '$ORIGIN' $A; done
+
 RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
 RUN apt-get update
 RUN apt-get -y install php7.1-dev
-RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/opt/v8 && make && make test && make install
+RUN cd /tmp/v8js/ && git checkout php7 && phpize && ./configure --with-v8js=/opt/v8 LDFLAGS="-lstdc++" && make && make install
 RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
 
 #Install imagick

@@ -65,7 +65,7 @@ This docker image is used to launch container with all necessary applicatives in
 
 Create local datas. Create host directories.
 
-    mkdir lioshi/data 
+    mkdir /home/lioshi/data 
     mkdir /home/lioshi/data/lamp 
     mkdir /home/lioshi/data/lamp/conf 
     mkdir /home/lioshi/data/lamp/www 
