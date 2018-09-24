@@ -27,10 +27,12 @@ RUN cd /tmp/v8/ && tools/dev/v8gen.py -vv x64.release -- is_component_build=true
 RUN apt-get install patchelf
 RUN for A in /opt/v8/lib/*.so; do patchelf --set-rpath '$ORIGIN' $A; done
 
-RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
+# RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
+RUN cd /tmp && git clone https://github.com/stesie/v8js.git
 RUN apt-get update
 RUN apt-get -y install php7.1-dev
-RUN cd /tmp/v8js/ && git checkout php7 && phpize && ./configure --with-v8js=/opt/v8 LDFLAGS="-lstdc++" && make && make install
+# RUN cd /tmp/v8js/ && git checkout php7 && phpize && ./configure --with-v8js=/opt/v8 LDFLAGS="-lstdc++" && make && make install
+RUN cd /tmp/v8js/ && git checkout issue-374 && phpize && ./configure --with-v8js=/opt/v8 LDFLAGS="-lstdc++" && make && make install
 RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
 
 #Install imagick

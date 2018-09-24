@@ -247,7 +247,7 @@ Container launching (with ElasticSearch link, for testa application usage)
 
 ### launch previously "lioshi/memcached" image 
 
-    docker run --name memcached -p 11211:11211 -d lioshi/memcached
+    docker run --name memcached2 -p 11211:11211 -d lioshi/memcached
 
 ### And then launch "lioshi/lamp" image with link
 
@@ -256,7 +256,7 @@ Container launching (with ElasticSearch link, for testa application usage)
     -v /home/lioshi/data/mysql:/var/lib/mysql \
     -e MYSQL_PASS="admin" \
     --link elasticsearch \
-    --link memcached:memcached \
+    --link memcached2 \
     --name=lamp \
     lamp:php5
 
@@ -464,7 +464,7 @@ Lancer le populate d'elasticSearch
 
 
 ## Restart containers
-    docker restart elasticsearch & docker restart memcached & docker restart lamp
+    docker restart elasticsearch & docker restart memcached2 & docker restart lamp
 
 ## Launch image for diem's sites
     docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /home/lioshi/data:/data -v /home/lioshi/data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem1.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=sitediem4.loc:127.0.0.1 --add-host=sitediem5.loc:127.0.0.1 --add-host=sitediem6.loc:127.0.0.1 --add-host=sitediem7.loc:127.0.0.1 --add-host=sitediem8.loc:127.0.0.1 --add-host=sitediem9.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lamp:latest
@@ -475,9 +475,9 @@ Lancer le populate d'elasticSearch
 
     docker run --privileged=true -d -p 9200:9200 -p 9300:9300 -v /home/lioshi/data/elasticsearch:/usr/share/elasticsearch/data --name=elasticsearch lioshi/elasticsearch
 
-    docker run --name memcached -p 11211:11211 -d lioshi/memcached
+    docker run --name memcached2 -p 11212:11211 -d lioshi/memcached
 
-    docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /home/lioshi/data:/data -v /home/lioshi/data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --link elasticsearch --link memcached --name=lamp --add-host=sitediem1.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=sitediem4.loc:127.0.0.1 --add-host=sitediem5.loc:127.0.0.1 --add-host=sitediem6.loc:127.0.0.1 --add-host=sitediem7.loc:127.0.0.1 --add-host=sitediem8.loc:127.0.0.1 --add-host=sitediem9.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lamp:latest
+    docker run --privileged=true -d -p 80:80 -p 3306:3306 -v /home/lioshi/data:/data -v /home/lioshi/data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --link elasticsearch --link memcached2 --name=lamp --add-host=sitediem1.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=sitediem4.loc:127.0.0.1 --add-host=sitediem5.loc:127.0.0.1 --add-host=sitediem6.loc:127.0.0.1 --add-host=sitediem7.loc:127.0.0.1 --add-host=sitediem8.loc:127.0.0.1 --add-host=sitediem9.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lamp:latest
 
     docker exec -it lamp env TERM=xterm bash
 
