@@ -79,6 +79,7 @@ RUN chmod 755 /*.sh
 
 # config Apache
 RUN a2enmod rewrite
+RUN a2enmod ssl
 
 # Environment variables to configure php
 ENV PHP_UPLOAD_MAX_FILESIZE 10M
