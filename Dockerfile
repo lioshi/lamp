@@ -17,23 +17,71 @@ RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt
 RUN apt-get update
 RUN apt-get -y install --no-install-recommends supervisor apt-utils git apache2 lynx mysql-server pwgen php7.1 libapache2-mod-php7.1 php7.1-mysql php7.1-curl php7.1-json php7.1-gd php7.1-mcrypt php7.1-msgpack php7.1-memcached php7.1-intl php7.1-sqlite3 php7.1-gmp php7.1-geoip php7.1-mbstring php7.1-xml php7.1-zip php7.1-imap php7.1-soap vim graphviz parallel cron jpegoptim optipng locales
 
+
+
+
+
+
 #Install v8js (compile version)
-RUN apt-get -y install build-essential python libglib2.0-dev curl
+RUN apt-get -y install build-essential python libglib2.0-dev curl 
+
+
+
+
+###################################################################
+###########################     A TESTER
+########### https://github.com/Strimoid/docker-php/blob/master/v8/Dockerfile
+######################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# LIB V8 compilation
 RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 ENV PATH=${PATH}:/tmp/depot_tools
-RUN cd /tmp && fetch --no-history v8
-RUN cd /tmp/v8/ && tools/dev/v8gen.py -vv x64.release -- is_component_build=true && ninja -C out.gn/x64.release/ && mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include && cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin out.gn/x64.release/icudtl.dat /opt/v8/lib/ && cp -R include/* /opt/v8/include/
+# RUN cd /tmp && fetch --no-history v8
+RUN cd /tmp && fetch v8
+RUN cd /tmp/v8/ && git checkout 6.5.257 && gclient sync && tools/dev/v8gen.py -vv x64.release -- is_component_build=true && ninja -C /tmp/v8/out.gn/x64.release/ 
 
-RUN apt-get install patchelf
-RUN for A in /opt/v8/lib/*.so; do patchelf --set-rpath '$ORIGIN' $A; done
+
+RUN mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include
+RUN cp /tmp/v8/out.gn/x64.release/lib*.so /opt/v8/lib/ && cp -R /tmp/v8/include/* /opt/v8/include
+RUN cp /tmp/v8/out.gn/x64.release/natives_blob.bin /opt/v8/lib
+RUN cp /tmp/v8/out.gn/x64.release/snapshot_blob.bin /opt/v8/lib
+RUN cd /tmp/v8/out.gn/x64.release/obj && ar rcsDT libv8_libplatform.a v8_libplatform/*.o && echo -e "create /opt/v8/lib/libv8_libplatform.a\naddlib /tmp/v8/out.gn/x64.release/obj/libv8_libplatform.a\nsave\nend" | sudo ar -M`
+
+
+# RUN mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include 
+# RUN cp /tmp/v8/out.gn/x64.release/lib*.so /tmp/v8/out.gn/x64.release/*_blob.bin /tmp/v8/out.gn/x64.release/icudtl.dat /opt/v8/lib/ 
+# RUN cp -R /tmp/v8/include/* /opt/v8/include/
+
+# RUN apt-get install patchelf
+# RUN for A in /opt/v8/lib/*.so; do patchelf --set-rpath '$ORIGIN' $A; done
+
+
+
+
+
 
 # RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
-RUN cd /tmp && git clone https://github.com/stesie/v8js.git
+RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
 RUN apt-get update
 RUN apt-get -y install php7.1-dev
 # RUN cd /tmp/v8js/ && git checkout php7 && phpize && ./configure --with-v8js=/opt/v8 LDFLAGS="-lstdc++" && make && make install
-RUN cd /tmp/v8js/ && git checkout issue-374 && phpize && ./configure --with-v8js=/opt/v8 LDFLAGS="-lstdc++" && make && make install
-RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
+# RUN git checkout issue-374 
+RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/opt/v8 LDFLAGS="-lstdc++" && make && make install && echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
 
 #Install imagick
 RUN apt-get -y install imagemagick php7.1-imagick 
