@@ -46,9 +46,6 @@
 # RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/opt/v8 LDFLAGS="-lstdc++" && make && make install && echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
 #####################################################################################################################
 
-
-
-
 # FROM php:7.2-fpm
 FROM debian:stretch
 MAINTAINER lioshi <lioshi@lioshi.com>
