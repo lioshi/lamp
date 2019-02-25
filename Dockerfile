@@ -1,91 +1,107 @@
-FROM debian:jessie
+################################################## OLD ##############################################################
+# FROM debian:jessie
+# MAINTAINER lioshi <lioshi@lioshi.com>
+
+# # Install packages
+# ENV DEBIAN_FRONTEND noninteractive
+# RUN mkdir -p /var/cache/apt/archives/partial
+# RUN touch /var/cache/apt/archives/lock
+# RUN chmod 640 /var/cache/apt/archives/lock
+# RUN apt-get clean 
+# RUN apt-get update --fix-missing
+
+# # PHP7 lamp version
+# RUN apt-get -y install apt-transport-https lsb-release ca-certificates
+# RUN apt-get -y install wget
+# RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+# RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+# RUN apt-get update
+# RUN apt-get -y install --no-install-recommends supervisor apt-utils git apache2 lynx mysql-server pwgen php7.1 libapache2-mod-php7.1 php7.1-mysql php7.1-curl php7.1-json php7.1-gd php7.1-mcrypt php7.1-msgpack php7.1-memcached php7.1-intl php7.1-sqlite3 php7.1-gmp php7.1-geoip php7.1-mbstring php7.1-xml php7.1-zip php7.1-imap php7.1-soap vim graphviz parallel cron jpegoptim optipng locales
+
+# #Install v8js (compile version)
+# RUN apt-get -y install build-essential python libglib2.0-dev curl 
+
+# # LIB V8 compilation
+# RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+# ENV PATH=${PATH}:/tmp/depot_tools
+# # RUN cd /tmp && fetch --no-history v8
+# RUN cd /tmp && fetch v8
+# RUN cd /tmp/v8/ && git checkout 6.5.257 && gclient sync && tools/dev/v8gen.py -vv x64.release -- is_component_build=true && ninja -C /tmp/v8/out.gn/x64.release/ 
+# RUN mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include
+# RUN cp /tmp/v8/out.gn/x64.release/lib*.so /opt/v8/lib/ && cp -R /tmp/v8/include/* /opt/v8/include
+# RUN cp /tmp/v8/out.gn/x64.release/natives_blob.bin /opt/v8/lib
+# RUN cp /tmp/v8/out.gn/x64.release/snapshot_blob.bin /opt/v8/lib
+# RUN cd /tmp/v8/out.gn/x64.release/obj && ar rcsDT libv8_libplatform.a v8_libplatform/*.o && echo -e "create /opt/v8/lib/libv8_libplatform.a\naddlib /tmp/v8/out.gn/x64.release/obj/libv8_libplatform.a\nsave\nend" | sudo ar -M`
+# # RUN mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include 
+# # RUN cp /tmp/v8/out.gn/x64.release/lib*.so /tmp/v8/out.gn/x64.release/*_blob.bin /tmp/v8/out.gn/x64.release/icudtl.dat /opt/v8/lib/ 
+# # RUN cp -R /tmp/v8/include/* /opt/v8/include/
+# # RUN apt-get install patchelf
+# # RUN for A in /opt/v8/lib/*.so; do patchelf --set-rpath '$ORIGIN' $A; done
+# # RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
+# RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
+# RUN apt-get update
+# RUN apt-get -y install php7.1-dev
+# # RUN cd /tmp/v8js/ && git checkout php7 && phpize && ./configure --with-v8js=/opt/v8 LDFLAGS="-lstdc++" && make && make install
+# # RUN git checkout issue-374 
+# RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/opt/v8 LDFLAGS="-lstdc++" && make && make install && echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
+#####################################################################################################################
+
+
+
+
+# FROM php:7.2-fpm
+FROM debian:stretch
 MAINTAINER lioshi <lioshi@lioshi.com>
 
-# Install packages
-ENV DEBIAN_FRONTEND noninteractive
-RUN mkdir -p /var/cache/apt/archives/partial
-RUN touch /var/cache/apt/archives/lock
-RUN chmod 640 /var/cache/apt/archives/lock
-RUN apt-get clean 
-RUN apt-get update --fix-missing
-
-# PHP7 lamp version
-RUN apt-get -y install apt-transport-https lsb-release ca-certificates
-RUN apt-get -y install wget
-RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
-RUN apt-get update
-RUN apt-get -y install --no-install-recommends supervisor apt-utils git apache2 lynx mysql-server pwgen php7.1 libapache2-mod-php7.1 php7.1-mysql php7.1-curl php7.1-json php7.1-gd php7.1-mcrypt php7.1-msgpack php7.1-memcached php7.1-intl php7.1-sqlite3 php7.1-gmp php7.1-geoip php7.1-mbstring php7.1-xml php7.1-zip php7.1-imap php7.1-soap vim graphviz parallel cron jpegoptim optipng locales
-
-
-
-
-
-
-#Install v8js (compile version)
-RUN apt-get -y install build-essential python libglib2.0-dev curl 
-
-
-
-
-###################################################################
-###########################     A TESTER
-########### https://github.com/Strimoid/docker-php/blob/master/v8/Dockerfile
-######################################################################
+# Build V8
+RUN apt-get update && \
+    apt-get install -y bzip2 wget git g++ python libicu-dev libmagickwand-dev libpq-dev zlib1g-dev software-properties-common && \
+    #add-apt-repository ppa:ondrej/php && \
+    apt-get -y install apt-transport-https lsb-release ca-certificates gnupg gnupg2 gnupg1 && \
+    wget -q https://packages.sury.org/php/apt.gpg -O- | apt-key add - && \
+    echo "deb https://packages.sury.org/php/ stretch main" | tee /etc/apt/sources.list.d/php.list && \
+    apt-get update && \
+    apt-get install -y libapache2-mod-php7.2 php7.2-cli php7.2-mysql php7.2-gd php7.2-imagick php7.2-recode php7.2-tidy php7.2-xmlrpc supervisor apt-utils git apache2 lynx mysql-server pwgen php7.2-curl php7.2-json php7.2-msgpack php7.2-memcached php7.2-intl php7.2-sqlite3 php7.2-gmp php7.2-geoip php7.2-mbstring php7.2-xml php7.2-zip php7.2-imap php7.2-soap vim graphviz parallel cron jpegoptim optipng locales && \
+    git clone --depth=1 https://chromium.googlesource.com/chromium/tools/depot_tools.git /tmp/depot_tools && \
+    export PATH="$PATH:/tmp/depot_tools" && \
+    cd /usr/local/src && \
+    fetch v8 && \
+    cd v8 && \
+    git checkout 6.0.292 && \
+    gclient sync && \
+    tools/dev/v8gen.py x64.release -- is_component_build=true && \
+    ninja -C out.gn/x64.release && \
+    cd /usr/local/src/v8 && \
+    cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin /usr/lib && \
+    cp -R include/* /usr/include && \
+    cd out.gn/x64.release/obj && \
+    ar rcsDT libv8_libplatform.a v8_libplatform/*.o && \
+    echo "create /usr/lib/libv8_libplatform.a\naddlib /usr/local/src/v8/out.gn/x64.release/obj/libv8_libplatform.a\nsave\nend" | ar -M && \
+    rm -rf /tmp/depot_tools /usr/local/src/v8 && \
+    apt-get autoremove -y
 
 
+RUN apt-get install -y patchelf php7.2-dev
+RUN for A in /usr/lib/*.so; do patchelf --set-rpath '$ORIGIN' $A; done
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-# LIB V8 compilation
-RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-ENV PATH=${PATH}:/tmp/depot_tools
-# RUN cd /tmp && fetch --no-history v8
-RUN cd /tmp && fetch v8
-RUN cd /tmp/v8/ && git checkout 6.5.257 && gclient sync && tools/dev/v8gen.py -vv x64.release -- is_component_build=true && ninja -C /tmp/v8/out.gn/x64.release/ 
-
-
-RUN mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include
-RUN cp /tmp/v8/out.gn/x64.release/lib*.so /opt/v8/lib/ && cp -R /tmp/v8/include/* /opt/v8/include
-RUN cp /tmp/v8/out.gn/x64.release/natives_blob.bin /opt/v8/lib
-RUN cp /tmp/v8/out.gn/x64.release/snapshot_blob.bin /opt/v8/lib
-RUN cd /tmp/v8/out.gn/x64.release/obj && ar rcsDT libv8_libplatform.a v8_libplatform/*.o && echo -e "create /opt/v8/lib/libv8_libplatform.a\naddlib /tmp/v8/out.gn/x64.release/obj/libv8_libplatform.a\nsave\nend" | sudo ar -M`
-
-
-# RUN mkdir -p /opt/v8/lib && mkdir -p /opt/v8/include 
-# RUN cp /tmp/v8/out.gn/x64.release/lib*.so /tmp/v8/out.gn/x64.release/*_blob.bin /tmp/v8/out.gn/x64.release/icudtl.dat /opt/v8/lib/ 
-# RUN cp -R /tmp/v8/include/* /opt/v8/include/
-
-# RUN apt-get install patchelf
-# RUN for A in /opt/v8/lib/*.so; do patchelf --set-rpath '$ORIGIN' $A; done
-
-
+RUN pecl install v8js
 
 
 
 
 # RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
-RUN cd /tmp && git clone https://github.com/phpv8/v8js.git
-RUN apt-get update
-RUN apt-get -y install php7.1-dev
-# RUN cd /tmp/v8js/ && git checkout php7 && phpize && ./configure --with-v8js=/opt/v8 LDFLAGS="-lstdc++" && make && make install
-# RUN git checkout issue-374 
-RUN cd /tmp/v8js/ && phpize && ./configure --with-v8js=/opt/v8 LDFLAGS="-lstdc++" && make && make install && echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
+# RUN apt-get update
+# # RUN apt-get -y install php7.1-dev
+# # RUN cd /tmp/v8js/ && git checkout php7 && phpize && ./configure --with-v8js=/opt/v8 LDFLAGS="-lstdc++" && make && make install
+# # RUN git checkout issue-374 
+# RUN cd /tmp/v8js/ && phpize && ./configure LDFLAGS="-lstdc++" && make && make install
+
+RUN echo "extension=v8js.so" >> /etc/php/7.2/apache2/php.ini
+
+
 
 #Install imagick
-RUN apt-get -y install imagemagick php7.1-imagick 
-RUN apt-get -y install libapache2-mod-xsendfile 
+RUN apt-get -y install imagemagick php7.2-imagick libapache2-mod-xsendfile 
 
 # Apache2 conf
 RUN echo "# Include vhost conf" >> /etc/apache2/apache2.conf 
@@ -99,7 +115,7 @@ RUN echo "</Directory>" >> /etc/apache2/apache2.conf
 
 # Timezone settings
 ENV TIMEZONE="Europe/Paris"
-RUN echo "date.timezone = '${TIMEZONE}'" >> /etc/php/7.1/apache2/php.ini && \
+RUN echo "date.timezone = '${TIMEZONE}'" >> /etc/php/7.2/apache2/php.ini && \
   echo "${TIMEZONE}" > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
 
 RUN sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen && \

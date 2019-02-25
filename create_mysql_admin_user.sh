@@ -20,8 +20,8 @@ fi
 _word=$( [ ${MYSQL_PASS} ] && echo "preset" || echo "default" )
 echo "=> Creating MySQL admin user with ${_word} password"
 
-mysql -uroot -e "CREATE USER 'admin'@'%' IDENTIFIED BY '$PASS'"
-mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION"
+mysql -uroot -e "CREATE USER 'admin'@'localhost' IDENTIFIED BY '$PASS'"
+mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION"
 
 
 echo "=> Done!"
