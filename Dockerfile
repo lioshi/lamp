@@ -61,7 +61,7 @@ RUN apt-get update && \
     wget -q https://packages.sury.org/php/apt.gpg -O- | apt-key add - && \
     echo "deb https://packages.sury.org/php/ stretch main" | tee /etc/apt/sources.list.d/php.list && \
     apt-get update && \
-    apt-get install -y libapache2-mod-php7.2 php7.2-cli php7.2-mysql php7.2-gd php7.2-imagick php7.2-recode php7.2-tidy php7.2-xmlrpc supervisor apt-utils git apache2 lynx mysql-server pwgen php7.2-curl php7.2-json php7.2-msgpack php7.2-memcached php7.2-intl php7.2-sqlite3 php7.2-gmp php7.2-geoip php7.2-mbstring php7.2-xml php7.2-zip php7.2-imap php7.2-soap vim graphviz parallel cron jpegoptim optipng locales && \
+    apt-get install -y libapache2-mod-php7.1 php7.1-cli php7.1-mysql php7.1-gd php7.1-imagick php7.1-recode php7.1-tidy php7.1-xmlrpc supervisor apt-utils git apache2 lynx mysql-server pwgen php7.1-curl php7.1-json php7.1-msgpack php7.1-memcached php7.1-intl php7.1-sqlite3 php7.1-gmp php7.1-geoip php7.1-mbstring php7.1-xml php7.1-zip php7.1-imap php7.1-soap vim graphviz parallel cron jpegoptim optipng locales && \
     git clone --depth=1 https://chromium.googlesource.com/chromium/tools/depot_tools.git /tmp/depot_tools && \
     export PATH="$PATH:/tmp/depot_tools" && \
     cd /usr/local/src && \
@@ -81,7 +81,7 @@ RUN apt-get update && \
     apt-get autoremove -y
 
 
-RUN apt-get install -y patchelf php7.2-dev
+RUN apt-get install -y patchelf php7.1-dev
 RUN for A in /usr/lib/*.so; do patchelf --set-rpath '$ORIGIN' $A; done
 
 RUN pecl install v8js
@@ -96,12 +96,12 @@ RUN pecl install v8js
 # # RUN git checkout issue-374 
 # RUN cd /tmp/v8js/ && phpize && ./configure LDFLAGS="-lstdc++" && make && make install
 
-RUN echo "extension=v8js.so" >> /etc/php/7.2/apache2/php.ini
+RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
 
 
 
 #Install imagick
-RUN apt-get -y install imagemagick php7.2-imagick libapache2-mod-xsendfile 
+RUN apt-get -y install imagemagick php7.1-imagick libapache2-mod-xsendfile 
 
 # Apache2 conf
 RUN echo "# Include vhost conf" >> /etc/apache2/apache2.conf 
@@ -115,7 +115,7 @@ RUN echo "</Directory>" >> /etc/apache2/apache2.conf
 
 # Timezone settings
 ENV TIMEZONE="Europe/Paris"
-RUN echo "date.timezone = '${TIMEZONE}'" >> /etc/php/7.2/apache2/php.ini && \
+RUN echo "date.timezone = '${TIMEZONE}'" >> /etc/php/7.1/apache2/php.ini && \
   echo "${TIMEZONE}" > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
 
 RUN sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen && \
@@ -170,10 +170,10 @@ RUN echo "alias node='nodejs'" >> ~/.bashrc
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 # Phpmyadmin
-RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.7.2/phpMyAdmin-4.7.2-all-languages.zip -P /var/www/html/
+RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.8.5/phpMyAdmin-4.8.5-all-languages.zip -P /var/www/html/
 RUN apt-get -q -y install unzip
-RUN unzip /var/www/html/phpMyAdmin-4.7.2-all-languages.zip -d /var/www/html/
-RUN mv /var/www/html/phpMyAdmin-4.7.2-all-languages/ /var/www/html/phpmyadmin/
+RUN unzip /var/www/html/phpMyAdmin-4.8.5-all-languages.zip -d /var/www/html/
+RUN mv /var/www/html/phpMyAdmin-4.8.5-all-languages/ /var/www/html/phpmyadmin/
 RUN cp /var/www/html/phpmyadmin/config.sample.inc.php /var/www/html/phpmyadmin/config.inc.php
 ADD configs/phpmyadmin/config.inc.php /var/www/html/phpmyadmin/config.inc.php
 RUN chmod 755 /var/www/html/phpmyadmin/config.inc.php
