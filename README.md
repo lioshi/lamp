@@ -122,6 +122,15 @@ Build image LAMP for version you need, in root of repo LAMP directory
     docker build -f Dockerfile-php5 --no-cache --tag="lamp:php5" . 
     (optional) docker build -f Dockerfile-php5v8js --tag="lamp:php5v8js" .
  
+Push local image into hubdocker
+
+- Create tag
+    >>> docker tag lamp:latest lioshi/lamp:latest
+- Connect to docker hub from CLI
+    >>> docker login --username=lioshi --email=lionel.fenneteau@gmail.com
+- Push local image into dockerhub
+    >>> docker push lioshi/lamp:latest
+
 Container launching (with sample site create)
 
 	docker run --privileged=true -d -p 80:80 -p 443:443 -p 3306:3306 \
