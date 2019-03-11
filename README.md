@@ -43,7 +43,7 @@ Docker image for diem sites. Debian with LAMP, nodeJs, imagick... etc
 ATTENTION: master/latest: PHP 7 version
 Call version you prefer in run command:
 
-- lamp:latest
+- lioshi/lamp:latest
 - lioshi/lamp:php5
 - lioshi/lamp:php5v8js
 
@@ -116,6 +116,7 @@ clone lioshi/lamp repo
     cd /home/lioshi/gitlibs/
     git clone https://github.com/lioshi/lamp.git
 
+### Build (if needed)
 Build image LAMP for version you need, in root of repo LAMP directory
 
     docker build --no-cache --tag="lamp:latest" .    
@@ -123,7 +124,6 @@ Build image LAMP for version you need, in root of repo LAMP directory
     (optional) docker build -f Dockerfile-php5v8js --tag="lamp:php5v8js" .
  
 Push local image into hubdocker
-
 - Create tag
     >>> docker tag lamp:latest lioshi/lamp:latest
 - Connect to docker hub from CLI
@@ -139,7 +139,7 @@ Container launching (with sample site create)
 	-e MYSQL_PASS="admin" \
 	-e SITE_SAMPLE="create" \
 	--name=lamp \
-	lamp:latest
+	lioshi/lamp:latest
 
 Container launching (with sample site erase if allready exists in /home/lioshi/data dir of host machine)
 
@@ -149,7 +149,7 @@ Container launching (with sample site erase if allready exists in /home/lioshi/d
 	-e MYSQL_PASS="admin" \
 	-e SITE_SAMPLE="erase" \
 	--name=lamp \
-	lamp:latest
+	lioshi/lamp:latest
 
 
 # Usage for diem's site sample
@@ -178,7 +178,7 @@ Container launching
     -e MYSQL_PASS="admin" \
     --name=lamp \
     --add-host=vm20.local:91.194.100.247 \
-    lamp:latest
+    lioshi/lamp:latest
 
 Alternative launching with added hosts for container. Needed for install a diem site
 
@@ -192,7 +192,7 @@ Alternative launching with added hosts for container. Needed for install a diem 
     --add-host=sitediem2.loc:127.0.0.1 \
     --add-host=sitediem3.loc:127.0.0.1 \
     --add-host=vm20.local:91.194.100.247 \
-    lamp:latest
+    lioshi/lamp:latest
 
 ## Access container in CLI
 
@@ -497,7 +497,7 @@ Lancer le populate d'elasticSearch
     docker restart elasticsearch & docker restart memcached2 & docker restart lamp
 
 ## Launch image for diem's sites
-    docker run --privileged=true -d -p 80:80 -p 443:443 -p 3306:3306 -v /home/lioshi/data:/data -v /home/lioshi/gitlibs:/gitlibs -v /home/lioshi/data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem1.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=sitediem4.loc:127.0.0.1 --add-host=sitediem5.loc:127.0.0.1 --add-host=sitediem6.loc:127.0.0.1 --add-host=sitediem7.loc:127.0.0.1 --add-host=sitediem8.loc:127.0.0.1 --add-host=sitediem9.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lamp:latest
+    docker run --privileged=true -d -p 80:80 -p 443:443 -p 3306:3306 -v /home/lioshi/data:/data -v /home/lioshi/gitlibs:/gitlibs -v /home/lioshi/data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem1.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=sitediem4.loc:127.0.0.1 --add-host=sitediem5.loc:127.0.0.1 --add-host=sitediem6.loc:127.0.0.1 --add-host=sitediem7.loc:127.0.0.1 --add-host=sitediem8.loc:127.0.0.1 --add-host=sitediem9.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
 
     docker exec -it lamp env TERM=xterm bash
 
@@ -507,7 +507,7 @@ Lancer le populate d'elasticSearch
 
     docker run --name memcached2 -p 11212:11211 -d lioshi/memcached
 
-    docker run --privileged=true -d -p 80:80 -p 443:443 -p 3306:3306 -v /home/lioshi/data:/data -v /home/lioshi/gitlibs:/gitlibs -v /home/lioshi/data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --link elasticsearch --link memcached2 --name=lamp --add-host=sitediem1.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=sitediem4.loc:127.0.0.1 --add-host=sitediem5.loc:127.0.0.1 --add-host=sitediem6.loc:127.0.0.1 --add-host=sitediem7.loc:127.0.0.1 --add-host=sitediem8.loc:127.0.0.1 --add-host=sitediem9.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lamp:latest
+    docker run --privileged=true -d -p 80:80 -p 443:443 -p 3306:3306 -v /home/lioshi/data:/data -v /home/lioshi/gitlibs:/gitlibs -v /home/lioshi/data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --link elasticsearch --link memcached2 --name=lamp --add-host=sitediem1.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=sitediem4.loc:127.0.0.1 --add-host=sitediem5.loc:127.0.0.1 --add-host=sitediem6.loc:127.0.0.1 --add-host=sitediem7.loc:127.0.0.1 --add-host=sitediem8.loc:127.0.0.1 --add-host=sitediem9.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest
 
     docker exec -it lamp env TERM=xterm bash
 
@@ -535,7 +535,7 @@ In workbench use this IP and admin user with password choose in docker run -e MY
 
 	sudo service docker start && \
 	docker rm -f lamp && \
-	docker run --privileged=true -d -p 80:80 -p 443:443 -p 3306:3306 -v /data:/data -v /data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lamp:latest && \
+	docker run --privileged=true -d -p 80:80 -p 443:443 -p 3306:3306 -v /data:/data -v /data/mysql:/var/lib/mysql -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
 	docker exec -it lamp env TERM=xterm bash
 	
 
@@ -555,6 +555,6 @@ Then launch those commands
 
     sudo service docker start && \
     docker rm -f lamp && \
-    docker run -d -p 80:80 -p 443:443 -p 3306:3306 -v /data:/data -e MYSQL_PERSIST_BY_CRON="yes" -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lamp:latest && \
+    docker run -d -p 80:80 -p 443:443 -p 3306:3306 -v /data:/data -e MYSQL_PERSIST_BY_CRON="yes" -e MYSQL_PASS="admin" --name=lamp --add-host=sitediem.loc:127.0.0.1 --add-host=sitediem2.loc:127.0.0.1 --add-host=sitediem3.loc:127.0.0.1 --add-host=vm20.local:91.194.100.247 lioshi/lamp:latest && \
     docker exec -it lamp env TERM=xterm bash
 
