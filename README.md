@@ -81,6 +81,26 @@ Add host locally (in your /etc/hosts file)
 
 On Mac OSX : the host Ip will be the IP you will be given when you'll start the Docker Quickstart terminal (IP of the "default" machine)
 
+Install Docker on Debian stretch
+
+    sudo apt-get install apt-transport-https dirmngr
+    su -
+    
+En root:
+
+    echo 'deb https://apt.dockerproject.org/repo debian-stretch main' >> /etc/apt/sources.list
+    apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys F76221572C52609D
+    exit
+
+En user
+
+    sudo apt-get update
+    sudo apt-get install docker-engine
+    docker -v
+    sudo service docker start
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+
 Run docker service
 
 	sudo service docker start
@@ -96,7 +116,7 @@ clone lioshi/lamp repo
     cd /home/lioshi/gitlibs/
     git clone https://github.com/lioshi/lamp.git
 
-Build image LAMP for version you need, a root of repo LAMP directory
+Build image LAMP for version you need, in root of repo LAMP directory
 
     docker build --no-cache --tag="lamp:latest" .    
     docker build -f Dockerfile-php5 --no-cache --tag="lamp:php5" . 
