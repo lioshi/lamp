@@ -113,7 +113,7 @@ RUN echo "</Directory>" >> /etc/apache2/apache2.conf
 # Timezone settings
 ENV TIMEZONE="Europe/Paris"
 RUN echo "date.timezone = '${TIMEZONE}'" >> /etc/php/7.1/apache2/php.ini && \
-  echo "${TIMEZONE}" > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
+  echo "${TIMEZONE}" > /etc/timezone && dpkg-reconfigure --frontend=noninteractive tzdata
 
 RUN sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen && \
     echo 'LANG="fr_FR.UTF-8"'>/etc/default/locale && \

@@ -119,8 +119,8 @@ clone lioshi/lamp repo
 ### Build (if needed)
 Build image LAMP for version you need, in root of repo LAMP directory
 
-    docker build --no-cache --tag="lamp:latest" .    
-    docker build -f Dockerfile-php5 --no-cache --tag="lamp:php5" . 
+    docker build --tag="lamp:latest" .    
+    docker build -f Dockerfile-php5 --tag="lamp:php5" . 
     (optional) docker build -f Dockerfile-php5v8js --tag="lamp:php5v8js" .
  
 Push local image into hubdocker
@@ -283,12 +283,12 @@ Container launching (with ElasticSearch link, for testa application usage)
 
     docker run --privileged=true -d -p 80:80 -p 443:443 -p 3306:3306 \
     -v /home/lioshi/data:/data \
-    -v /home/lioshi/data/mysql:/var/lib/mysql \
+    -v /home/lioshi/data/mysqltesta:/var/lib/mysql \
     -e MYSQL_PASS="admin" \
     --link elasticsearch \
     --link memcached2 \
     --name=lamp \
-    lamp:php5
+    lioshi/lamp:php5
 
     docker exec -it lamp env TERM=xterm bash
 
