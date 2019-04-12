@@ -12,7 +12,8 @@ RUN apt-get update && \
     
 
 # Build V8
-RUN apt-get install -y build-essential curl git python libglib2.0-dev libv8-dev
+RUN apt-get install -y build-essential curl git python libglib2.0-dev 
+# libv8-dev
 
 RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 
@@ -118,7 +119,6 @@ RUN chmod 755 /var/www/html/phpmyadmin/config.inc.php
 RUN apt-get -y install curl
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
-
 
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
