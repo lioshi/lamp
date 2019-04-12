@@ -1,7 +1,6 @@
 FROM debian:stretch
 MAINTAINER lioshi <lioshi@lioshi.com>
 
-
 RUN apt-get update && \
     apt-get install -y bzip2 wget git g++ python libicu-dev libmagickwand-dev libpq-dev zlib1g-dev software-properties-common && \
     #add-apt-repository ppa:ondrej/php && \
@@ -14,25 +13,28 @@ RUN apt-get update && \
 
 # Build V8
 RUN apt-get install -y build-essential curl git python libglib2.0-dev libv8-dev
-RUN cd /tmp
-RUN git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-RUN export PATH=`pwd`/depot_tools:"$PATH"
-RUN fetch v8
-RUN cd v8
-RUN git checkout 6.4.388.18
-RUN gclient sync
-RUN tools/dev/v8gen.py -vv x64.release -- is_component_build=true
-RUN ninja -C out.gn/x64.release/
-RUN mkdir -p /opt/v8/{lib,include}
-RUN cp out.gn/x64.release/lib*.so out.gn/x64.release/*_blob.bin out.gn/x64.release/icudtl.dat /opt/v8/lib/
-RUN cp -R include/* /opt/v8/include/
 
+RUN cd /tmp && git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+
+RUN export PATH=/tmp/depot_tools:"$PATH" && \
+cd /tmp && \
+fetch v8 && \
+cd v8 && \ 
+git checkout 6.4.388.18 && \
+gclient sync && \
+/tmp/v8/tools/dev/v8gen.py -vv x64.release -- is_component_build=true && \
+ninja -C /tmp/v8/out.gn/x64.release/
+
+RUN mkdir -p /opt/v8/lib
+RUN mkdir -p /opt/v8/include 
+RUN cp /tmp/v8/out.gn/x64.release/lib*.so /tmp/v8/out.gn/x64.release/*_blob.bin /tmp/v8/out.gn/x64.release/icudtl.dat /opt/v8/lib/ 
+RUN cp -R /tmp/v8/include/* /opt/v8/include/
 RUN apt-get install patchelf
 RUN for A in /opt/v8/lib/*.so; do patchelf --set-rpath '$ORIGIN' $A; done
-
 RUN printf "/opt/v8" | pecl install v8js
-
 RUN echo "extension=v8js.so" >> /etc/php/7.1/apache2/php.ini
+
+RUN rm -rf /tmp/depot_tools /tmp/v8 
 
 #Install imagick
 RUN apt-get -y install imagemagick php7.1-imagick libapache2-mod-xsendfile 

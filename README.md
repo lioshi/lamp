@@ -127,7 +127,7 @@ Push local image into hubdocker
 - Create tag
     >>> docker tag lamp:latest lioshi/lamp:latest
 - Connect to docker hub from CLI
-    >>> docker login --username=lioshi --email=lionel.fenneteau@gmail.com
+    >>> docker login --username=lioshi 
 - Push local image into dockerhub
     >>> docker push lioshi/lamp:latest
 
