@@ -5,7 +5,7 @@ VOLUME_HOME="/var/lib/mysql"
 
 sed -ri -e "s/^upload_max_filesize.*/upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE}/" \
     -e "s/^post_max_size.*/post_max_size = ${PHP_POST_MAX_SIZE}/" \
-    -e "s/^memory_limit.*/memory_limit = ${PHP_MEMORY_LIMIT}/" /etc/php/7.2/apache2/php.ini
+    -e "s/^memory_limit.*/memory_limit = ${PHP_MEMORY_LIMIT}/" /etc/php/7.1/apache2/php.ini
 
 # install db
 if [[ ! -d $VOLUME_HOME/mysql ]]; then
