@@ -163,7 +163,7 @@ Create local datas. Create host directories.
     mkdir /home/lioshi/data/lamp/conf 
     mkdir /home/lioshi/data/lamp/www 
     mkdir /home/lioshi/data/gitlibs/
-    git clone https://github.com/SidPresse/diem.git
+    git clone https://gitlab.dev.eilep.com/lesechos/diem.git
     cd /home/lioshi/data/gitlibs/diem
     git submodule update --init --recursive
 
