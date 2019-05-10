@@ -174,6 +174,7 @@ Container launching
 	
     docker run --privileged=true -d -p 80:80 -p 443:443 -p 3306:3306 \
     -v /home/lioshi/data:/data \
+    -v /home/lioshi/gitlibs:/gitlibs \
     -v /home/lioshi/data/mysql:/var/lib/mysql \
     -e MYSQL_PASS="admin" \
     --name=lamp \
