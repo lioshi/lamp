@@ -189,7 +189,7 @@ Alternative launching with added hosts for container. Needed for install a diem 
     -v /home/lioshi/data/mysql:/var/lib/mysql \
     -e MYSQL_PASS="admin" \
     --name=lamp \
-    --add-host=sitediem.loc:127.0.0.1 \
+    --add-host=sitediem1.loc:127.0.0.1 \
     --add-host=sitediem2.loc:127.0.0.1 \
     --add-host=sitediem3.loc:127.0.0.1 \
     --add-host=vm20.local:91.194.100.247 \
