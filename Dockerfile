@@ -1,5 +1,5 @@
 FROM debian:stretch
-MAINTAINER lioshi <lioshi@lioshi.com>
+LABEL lioshi <lioshi@lioshi.com>
 
 RUN apt-get update && \
     apt-get install -y bzip2 wget git g++ python libicu-dev libmagickwand-dev libpq-dev zlib1g-dev software-properties-common && \
