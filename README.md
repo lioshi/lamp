@@ -119,6 +119,7 @@ clone lioshi/lamp repo
 ### Build (if needed)
 Build image LAMP for version you need, in root of repo LAMP directory
 
+    docker build --tag="lamp:php7" .  
     docker build --tag="lamp:latest" .    
     docker build -f Dockerfile-php5 --tag="lamp:php5" . 
     (optional) docker build -f Dockerfile-php5v8js --tag="lamp:php5v8js" .
