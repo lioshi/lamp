@@ -49,6 +49,8 @@ else
 	fi
 fi
 
+# Add apache user (www-data) into root group to have access on Volumes from host
+gpasswd -a www-data root
 
 # supervisord
 echo "========================================================================"
