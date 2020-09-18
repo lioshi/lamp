@@ -8,7 +8,7 @@ Legacy's versions
 - lioshi/lamp:php5
 - lioshi/lamp:php5v8js
 
-# Prerequist
+# Prerequisites
 
 ## Install Docker
 
