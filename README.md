@@ -1,43 +1,5 @@
-<!-- MarkdownTOC -->
-
-- [Lamp](#lamp)
-- [Versions](#versions)
-- [Usage for site sample](#usage-for-site-sample)
-    - [Launch container](#launch-container)
-- [Usage for diem's site sample](#usage-for-diems-site-sample)
-    - [Launch container](#launch-container)
-    - [Access container in CLI](#access-container-in-cli)
-    - [Install diem site](#install-diem-site)
-    - [Erase container](#erase-container)
-    - [Restart a docker container](#restart-a-docker-container)
-    - [Apache2 controls](#apache2-controls)
-    - [PhpMyAdmin access](#phpmyadmin-access)
-    - [Xdebug usage](#xdebug-usage)
-- [Usage for install testa's site](#usage-for-install-testas-site)
-    - [Elasticsearch install](#elasticsearch-install)
-        - [launch previously "lioshi/elasticsearch" image with directory in host to persist elasticsearch indexations](#launch-previously-lioshielasticsearch-image-with-directory-in-host-to-persist-elasticsearch-indexations)
-        - [launch previously "lioshi/memcached" image](#launch-previously-lioshimemcached-image)
-        - [And then launch "lioshi/lamp" image with link](#and-then-launch-lioshilamp-image-with-link)
-        - [Access lamp container](#access-lamp-container)
-        - [the first time run, into testa dir](#the-first-time-run-into-testa-dir)
-    - [Testa install](#testa-install)
-    - [Déployer le site](#d%C3%A9ployer-le-site)
-- [Linux usage](#linux-usage)
-    - [Restart containers](#restart-containers)
-    - [Launch image for diem's sites](#launch-image-for-diems-sites)
-    - [Launch image for testa site](#launch-image-for-testa-site)
-    - [Some commands](#some-commands)
-    - [Mysql Workbench usage](#mysql-workbench-usage)
-- [Mac OSX / Windows usage](#mac-osx-windows-usage)
-    - [Launch image for diem's sites with data volume (TO BE TESTED)](#launch-image-for-diems-sites-with-data-volume-to-be-tested)
-    - [Launch image for diem's sites (WORKED, normaly)](#launch-image-for-diems-sites-worked-normaly)
-
-<!-- /MarkdownTOC -->
-
-
 # Lamp
-Docker image for diem sites. Debian with LAMP, nodeJs, imagick... etc
-
+Docker image for Diem sites. Debian with LAMP, nodeJs, imagick... etc
 
 # Versions
 ATTENTION: master/latest: PHP 7 version
@@ -116,21 +78,7 @@ clone lioshi/lamp repo
     cd /home/lioshi/gitlibs/
     git clone https://github.com/lioshi/lamp.git
 
-### Build (if needed)
-Build image LAMP for version you need, in root of repo LAMP directory
 
-    docker build --tag="lamp:php7" .  
-    docker build --tag="lamp:latest" .    
-    docker build -f Dockerfile-php5 --tag="lamp:php5" . 
-    (optional) docker build -f Dockerfile-php5v8js --tag="lamp:php5v8js" .
- 
-Push local image into hubdocker
-- Create tag
-    >>> docker tag lamp:latest lioshi/lamp:latest
-- Connect to docker hub from CLI
-    >>> docker login --username=lioshi 
-- Push local image into dockerhub
-    >>> docker push lioshi/lamp:latest
 
 Container launching (with sample site create)
 
@@ -291,3 +239,24 @@ In workbench use this IP and admin user with password choose in docker run -e MY
 
 
 
+
+
+
+# Build image
+In root directory of repo
+
+    docker build --tag="lamp:php7" .  
+
+## legacy versions
+
+    docker build --tag="lamp:latest" .    
+    docker build -f Dockerfile-php5 --tag="lamp:php5" . 
+    docker build -f Dockerfile-php5v8js --tag="lamp:php5v8js" .
+ 
+## Push local image into dockerhub
+- Create tag
+    >>> docker tag lamp:latest lioshi/lamp:latest
+- Connect to docker hub from CLI
+    >>> docker login --username=lioshi 
+- Push local image into dockerhub
+    >>> docker push lioshi/lamp:latest
