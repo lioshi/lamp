@@ -106,8 +106,6 @@ If http://site.loc works then remove it by launching
     -v ~/data/mysql:/var/lib/mysql  \
     -v ~/gitlibs:/gitlibs   \
     -e MYSQL_PASS="admin"  \
-    --link elasticsearch  \
-    --link memcached  \
     --name=lamp  \
     --add-host=diem1.site.loc:127.0.0.1  \
     --add-host=diem2.site.loc:127.0.0.1  \
