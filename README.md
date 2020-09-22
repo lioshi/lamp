@@ -130,7 +130,48 @@ If http://site.loc works then remove it by launching
     php /data/lamp/www/sitediem2/symfony db:loadDB && \
     php /data/lamp/www/sitediem2/symfony less:compile-all
 
-## Docker Container commands
+
+
+## Clone a remote site into local docker environment
+- On production server
+    - Create the dump 
+    ```bash
+    php /data/www/sitesv3/_site_ec/symfony db:dump --auto=true --envir=2 --compress=true --nameDate=true
+    ```
+    - Copy filename **/data/www/_sites_dumps/_site_ec/xxx.dump.tar.gz**
+
+- On local machine :
+    - Download the dump file from remote server (outside of docker container)
+    ```bash
+    rsync -chavzP --stats sidpresse@91.XXX.XXX.XXX:"/data/www/_sites_dumps/_site_ec/xxx.dump.tar.gz*" ~/data/lamp/_sites_dumps
+    ```
+    - Load dump into site (inside the docker container)
+    ```bash
+    php /data/lamp/www/diem1/symfony db:load /data/lamp/_sites_dumps/xxx.dump.tar.gz
+    ```
+
+## Push a dump to remote server
+- On local machine :
+    - Create the dump (inside the docker container)
+    ```bash
+    php /data/lamp/www/diem1/symfony db:dump --auto=true --envir=3 --compress=true --nameDate=true
+    ```
+    - Copy filename path **/data/lamp/_sites_dumps/diem1/xxx.dump.tar.gz**
+    - Upload the dump file to remote server (outside of docker container)
+    ```bash
+    rsync -avH /home/lioshi/data/lamp/_sites_dumps/diem1/xxx.dump.tar.gz* sidpresse@91.XXX.XXX.XXX:/data/www/_sites_dumps/_site_ec
+    ```
+- On production server
+    - Load dump into site 
+    ```bash
+    php /data/www/sitesv3/_site_ec/symfony db:load /data/lamp/_sites_dumps/_site_ec/xxx.dump.tar.gz
+    ```
+
+
+
+
+## Hints
+### Docker Container commands
 Acces to Docker container
     
     docker exec -it lamp env TERM=xterm bash
@@ -155,18 +196,18 @@ Stops running containers
 
     docker stop 
 
-## Inside Container commands
+### Inside Container commands
 Apache2 controls
 
     apachectl status
     apachectl configtest
     apachectl -S
 
-## PhpMyAdmin access
+### PhpMyAdmin access
 
 http://localhost/phpmyadmin
 
-## Xdebug usage
+### Xdebug usage
 Install package Xdebug
 
     apt-get -y install php5-xdebug
