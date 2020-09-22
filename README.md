@@ -131,7 +131,6 @@ If http://site.loc works then remove it by launching
     php /data/lamp/www/sitediem2/symfony less:compile-all
 
 
-
 ## Clone a remote site into local docker environment
 - On production server
     - Create the dump 
@@ -141,26 +140,36 @@ If http://site.loc works then remove it by launching
     - Copy filename **/data/www/_sites_dumps/_site_ec/xxx.dump.tar.gz**
 
 - On local machine :
-    - Download the dump file from remote server (outside of docker container)
-    ```bash
-    rsync -chavzP --stats sidpresse@91.XXX.XXX.XXX:"/data/www/_sites_dumps/_site_ec/xxx.dump.tar.gz*" ~/data/lamp/_sites_dumps
-    ```
-    - Load dump into site (inside the docker container)
-    ```bash
-    php /data/lamp/www/diem1/symfony db:load /data/lamp/_sites_dumps/xxx.dump.tar.gz
-    ```
+    - Linux
+        - Download the dump file from remote server (outside of docker container)
+        ```bash
+        rsync -chavzP --stats sidpresse@91.XXX.XXX.XXX:"/data/www/_sites_dumps/_site_ec/xxx.dump.tar.gz*" ~/data/lamp/_sites_dumps
+        ```
+        - Load dump into site (inside the docker container)
+        ```bash
+        php /data/lamp/www/diem1/symfony db:load /data/lamp/_sites_dumps/xxx.dump.tar.gz
+        ```
+    - Windows
+        ---
+        > 🔔 TODO : add commands to perform download & install dump 🔔
+        ---
 
 ## Push a dump to remote server
 - On local machine :
-    - Create the dump (inside the docker container)
-    ```bash
-    php /data/lamp/www/diem1/symfony db:dump --auto=true --envir=3 --compress=true --nameDate=true
-    ```
-    - Copy filename path **/data/lamp/_sites_dumps/diem1/xxx.dump.tar.gz**
-    - Upload the dump file to remote server (outside of docker container)
-    ```bash
-    rsync -avH /home/lioshi/data/lamp/_sites_dumps/diem1/xxx.dump.tar.gz* sidpresse@91.XXX.XXX.XXX:/data/www/_sites_dumps/_site_ec
-    ```
+    - Linux
+        - Create the dump (inside the docker container)
+        ```bash
+        php /data/lamp/www/diem1/symfony db:dump --auto=true --envir=3 --compress=true --nameDate=true
+        ```
+        - Copy filename path **/data/lamp/_sites_dumps/diem1/xxx.dump.tar.gz**
+        - Upload the dump file to remote server (outside of docker container)
+        ```bash
+        rsync -avH /home/lioshi/data/lamp/_sites_dumps/diem1/xxx.dump.tar.gz* sidpresse@91.XXX.XXX.XXX:/data/www/_sites_dumps/_site_ec
+        ```
+    - Windows
+        ---
+        > 🔔 TODO : add commands to perform create & push dump 🔔
+        ---
 - On production server
     - Load dump into site 
     ```bash
