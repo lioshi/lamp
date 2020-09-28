@@ -94,7 +94,7 @@ If http://site.loc works then remove it by launching
 # Usage for diem's site 
 ## Clone Diem repository
 
-    git clone https://gitlab.dev.eilep.com/lesechos/diem.git ~/gitlibs/diem
+    git clone https://gitlab.com/les-echos-publishing/diem/diem.git ~/gitlibs/diem
     cd ~/gitlibs/diem
     git submodule update --init --recursive
 
