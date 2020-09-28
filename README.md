@@ -96,6 +96,8 @@ If http://site.loc works then remove it by launching
 
     git clone https://gitlab.com/les-echos-publishing/diem/diem.git ~/gitlibs/diem
     cd ~/gitlibs/diem
+    git config --global credential.helper cache
+    git config --global credential.helper 'cache --timeout=3600'
     git submodule update --init --recursive
 
 ## Launch container
