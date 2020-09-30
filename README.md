@@ -117,6 +117,16 @@ If http://site.loc works then remove it by launching
     --add-host=testa.site.loc:127.0.0.1  \
     --add-host=vm20.local:91.194.100.247  \
     lioshi/lamp:php7 
+    
+## In host machine (not in docker container)
+Add in your /etc/hosts file
+
+	127.0.0.1   diem1.site.loc 
+	127.0.0.1   diem2.site.loc 
+	127.0.0.1   diem3.site.loc 
+	127.0.0.1   diem4.site.loc 
+	127.0.0.1   diem5.site.loc 
+	127.0.0.1   testa.site.loc 
 
 ## Install diem site
 
