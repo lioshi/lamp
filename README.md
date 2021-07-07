@@ -256,6 +256,9 @@ If needed
 ### Xdebug usage php7.1
 Sous l'instance docker lamp
 
+    apt-key del B188E2B695BD4743
+    curl -sSL -o /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+    apt update
     apt install php7.1-xdebug
     echo 'zend_extension="/usr/lib/php/20160303/xdebug.so"' >> /etc/php/7.1/cli/php.ini
     echo 'xdebug.mode=debug' >> /etc/php/7.1/cli/php.ini
