@@ -231,7 +231,7 @@ Apache2 controls
 
 http://localhost/phpmyadmin
 
-### Xdebug usage
+### Xdebug usage php5
 Install package Xdebug
 
     apt-get -y install php5-xdebug
@@ -253,9 +253,17 @@ If needed
     echo 'xdebug.profiler_enable_trigger = 1' >> /etc/php5/apache2/php.ini
     apachectl restart
 
+### Xdebug usage php7.1
+Sous l'instance docker lamp
 
-
-
+    apt install php7.1-xdebug
+    echo 'zend_extension="/usr/lib/php/20160303/xdebug.so"' >> /etc/php/7.1/cli/php.ini
+    echo 'xdebug.mode=debug' >> /etc/php/7.1/cli/php.ini
+    echo 'xdebug.client_host=127.0.0.1' >> /etc/php/7.1/cli/php.ini
+    echo 'xdebug.client_port="9003"' >> /etc/php/7.1/cli/php.ini
+    apachectl restart
+    php -v 
+    
 # Usage for install testa's site
 ## Elasticsearch install
 
